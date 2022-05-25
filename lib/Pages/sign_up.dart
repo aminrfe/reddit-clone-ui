@@ -3,7 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:reddit1/Pages/log_in.dart';
+import '/Pages/log_in.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key key}) : super(key: key);

@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:reddit1/sign_up.dart';
-<<<<<<< HEAD
+import '/Pages/sign_up.dart';
 import 'package:reddit1/Pages/log_in.dart';
-import 'package:reddit1/home_page.dart';
-=======
-import 'package:reddit1/log_in.dart';
-import 'package:reddit1/feed_page.dart';
->>>>>>> 77e07c3498f806eb3f3ca16a02b340349f62bdcd
+import '/Pages/home_page.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,24 +17,12 @@ class MyApp extends StatelessWidget {
       //   primarySwatch: Colors.blue,
       //   backgroundColor: Colors.white,
       // ),
-<<<<<<< HEAD
       initialRoute: '/HomePage',
       routes: {
         '/SignUp': (context) => SignUp(),
         '/LogIn': (context) => LogIn(),
         '/HomePage': (context) => HomePage(),
-=======
-      initialRoute: '/FeedPage',
-      routes: {
-        '/SignUp': (context) => SignUp(),
-        '/LogIn': (context) => LogIn(),
-        '/FeedPage': (context) => FeedPage(),
->>>>>>> 77e07c3498f806eb3f3ca16a02b340349f62bdcd
       },
-      
     );
   }
 }
-
-
-
