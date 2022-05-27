@@ -1,41 +1,46 @@
-import '/Models/post_model.dart';
-import '/Models/user_model.dart';
+import 'package:flutter/material.dart';
+import 'post_model.dart';
+import 'user_model.dart';
 
 class ForumModel {
-
-  String _forumName;
-  String _forumDesc;
+  String _name;
+  ImageProvider _avatar;
+  String _desc;
   UserModel _admin;
   List<PostModel> _posts;
 
-  ForumModel(this._forumName, this._forumDesc, this._admin, this._posts);
+  ForumModel(this._name, this._desc, this._admin, this._posts);
 
-  String get forumName => _forumName;
+  String get name => _name;
 
-  void set forumName(String forumName) {
-    _forumName = forumName;
+  set name(String name) {
+    _name = name;
   }
 
-  String get forumDesc => _forumDesc;
+  String get desc => _desc;
 
-  void set forumDesc(String forumDesc) {
-    _forumDesc = forumDesc;
+  set desc(String desc) {
+    _desc = desc;
+  }
+
+  ImageProvider get avatar => _avatar;
+  set avatar(ImageProvider avatar) {
+    _avatar = avatar;
   }
 
   UserModel get admin => _admin;
 
-  void set admin(UserModel admin) {
+  set admin(UserModel admin) {
     _admin = admin;
   }
 
   List<PostModel> get posts => _posts;
 
-  void set posts(List<PostModel> posts) {
+  set posts(List<PostModel> posts) {
     _posts = posts;
   }
 
   void addPost(PostModel post) {
     _posts.add(post);
   }
-
 }

@@ -1,58 +1,58 @@
-import '/Models/user_model.dart';
+import 'user_model.dart';
 
 class CommentModel {
   UserModel _user;
   String _comment;
   DateTime _date;
-  List<UserModel> _like;
-  List<UserModel> _dislike;
+  List<UserModel> _upvotes;
+  List<UserModel> _downvotes;
 
-  CommentModel(this._user, this._comment, this._date, this._like, this._dislike);
+  CommentModel(
+      this._user, this._comment, this._date, this._upvotes, this._downvotes);
 
   UserModel get user => _user;
 
-  void set user(UserModel user) {
+  set user(UserModel user) {
     _user = user;
   }
 
   String get comment => _comment;
 
-  void set comment(String comment) {
+  set comment(String comment) {
     _comment = comment;
   }
 
   DateTime get date => _date;
 
-  void set date(DateTime date) {
+  set date(DateTime date) {
     _date = date;
   }
 
-  List<UserModel> get like => _like;
+  List<UserModel> get upvotes => _upvotes;
 
-  void set like(List<UserModel> like) {
-    _like = like;
+  set upvotes(List<UserModel> upvotes) {
+    _upvotes = upvotes;
   }
 
-  void addLike(UserModel user) {
-    if(!_like.contains(user)) {
-      _like.add(user);
+  addUpvote(UserModel user) {
+    if (!_upvotes.contains(user)) {
+      _upvotes.add(user);
     } else {
-      _like.remove(user);
+      _upvotes.remove(user);
     }
   }
 
-  List<UserModel> get dislike => _dislike;
+  List<UserModel> get downvotes => _downvotes;
 
-  void set dislike(List<UserModel> dislike) {
-    _dislike = dislike;
+  set downvotes(List<UserModel> downvotes) {
+    _downvotes = downvotes;
   }
 
-  void addDislike(UserModel user) {
-    if(!_dislike.contains(user)) {
-      _dislike.add(user);
+  addDownvote(UserModel user) {
+    if (!_downvotes.contains(user)) {
+      _downvotes.add(user);
     } else {
-      _dislike.remove(user);
+      _downvotes.remove(user);
     }
   }
-
 }

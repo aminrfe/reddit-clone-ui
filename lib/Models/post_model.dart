@@ -1,6 +1,6 @@
-import '/Models/forum_model.dart';
-import '/Models/user_model.dart';
-import '/Models/comment_model.dart';
+import 'forum_model.dart';
+import 'user_model.dart';
+import 'comment_model.dart';
 
 class PostModel {
   String _title;
@@ -16,41 +16,41 @@ class PostModel {
 
   String get title => _title;
 
-  void set title(String title) {
+  set title(String title) {
     _title = title;
   }
 
   String get desc => _desc;
 
-  void set desc(String desc) {
+  set desc(String desc) {
     _desc = desc;
   }
 
   ForumModel get forum => _forum;
 
-  void set forum(ForumModel forum) {
+  set forum(ForumModel forum) {
     _forum = forum;
   }
 
   UserModel get user => _user;
 
-  void set user(UserModel user) {
+  set user(UserModel user) {
     _user = user;
   }
 
   DateTime get date => _date;
 
-  void set date(DateTime date) {
+  set date(DateTime date) {
     _date = date;
   }
 
   List<UserModel> get upvotes => _upvotes;
 
-  void set upvotes(List<UserModel> upvotes) {
+  set upvotes(List<UserModel> upvotes) {
     _upvotes = upvotes;
   }
 
-  void addUpvote(UserModel user) {
+  addUpvote(UserModel user) {
     if(!_upvotes.contains(user)) {
       _upvotes.add(user);
     } else {
@@ -60,11 +60,11 @@ class PostModel {
 
   List<UserModel> get downvotes => _downvotes;
 
-  void set downvotes(List<UserModel> downvotes) {
+  set downvotes(List<UserModel> downvotes) {
     _downvotes = downvotes;
   }
 
-  void addDownvote(UserModel user) {
+  addDownvote(UserModel user) {
     if(!_downvotes.contains(user)) {
       _downvotes.add(user);
     } else {
@@ -74,11 +74,11 @@ class PostModel {
 
   List<CommentModel> get comments => _comments;
 
-  void set comments(List<CommentModel> comments) {
+  set comments(List<CommentModel> comments) {
     _comments = comments;
   }
 
-  void addComment(CommentModel comment) {
+  addComment(CommentModel comment) {
     _comments.add(comment);
   }
 
