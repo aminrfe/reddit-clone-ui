@@ -12,55 +12,55 @@ class FeedPage extends StatefulWidget {
 }
 
 class _FeedPageState extends State<FeedPage> {
-  UserModel currentUser = new UserModel('Amin rafiee', '', '', [], [], []);
+  UserModel currentUser = UserModel('Amin rafiee', '', '', [], [], []);
 
   List<PostModel> userposts = [
-    new PostModel(
+    PostModel(
         "title1",
         'This is a test for reddit ui.\nIt is second line of text.',
-        new ForumModel('Programming', 'Desc',
-            new UserModel('Amin Rafiee', '88', '', [], [], []), []),
-        new UserModel('Amin rafiee', '', '', [], [], []),
+        ForumModel('Programming', 'Desc',
+            UserModel('Amin Rafiee', '88', '', [], [], []), []),
+        UserModel('Amin rafiee', '', '', [], [], []),
         DateTime.now(),
         [],
         [],
         []),
-    new PostModel(
+    PostModel(
         "title1",
         'This is a test for reddit ui.\nIt is second line of text.',
-        new ForumModel('Programming', 'Desc',
-            new UserModel('Amin Rafiee', '88', '', [], [], []), []),
-        new UserModel('Amin rafiee', '', '', [], [], []),
+        ForumModel('Programming', 'Desc',
+            UserModel('Amin Rafiee', '88', '', [], [], []), []),
+        UserModel('Amin rafiee', '', '', [], [], []),
         DateTime.now(),
         [],
         [],
         []),
-    new PostModel(
+    PostModel(
         "title1",
         'This is a test for reddit ui.\nIt is second line of text.',
-        new ForumModel('Programming', 'Desc',
-            new UserModel('Amin Rafiee', '88', '', [], [], []), []),
-        new UserModel('Amin rafiee', '', '', [], [], []),
+        ForumModel('Programming', 'Desc',
+            UserModel('Amin Rafiee', '88', '', [], [], []), []),
+        UserModel('Amin rafiee', '', '', [], [], []),
         DateTime.now(),
         [],
         [],
         []),
-    new PostModel(
+    PostModel(
         "title1",
         'This is a test for reddit ui.\nIt is second line of text.',
-        new ForumModel('Programming', 'Desc',
-            new UserModel('Amin Rafiee', '88', '', [], [], []), []),
-        new UserModel('Amin rafiee', '', '', [], [], []),
+        ForumModel('Programming', 'Desc',
+            UserModel('Amin Rafiee', '88', '', [], [], []), []),
+        UserModel('Amin rafiee', '', '', [], [], []),
         DateTime.now(),
         [],
         [],
         []),
-    new PostModel(
+    PostModel(
         "title1",
         'This is a test for reddit ui.\nIt is second line of text.',
-        new ForumModel('Programming', 'Desc',
-            new UserModel('Amin Rafiee', '88', '', [], [], []), []),
-        new UserModel('Amin rafiee', '', '', [], [], []),
+        ForumModel('Programming', 'Desc',
+            UserModel('Amin Rafiee', '88', '', [], [], []), []),
+        UserModel('Amin rafiee', '', '', [], [], []),
         DateTime.now(),
         [],
         [],
@@ -82,13 +82,36 @@ class _FeedPageState extends State<FeedPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: ListView.builder(itemCount: userposts.length,
-          itemBuilder: (context, index) {
-            return PostItem(userposts[index],
-                currentUser, () => changeUpVotes, () => changeDownVotes);
-          },
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(52),
+        child: AppBar(
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Colors.deepOrange,
+                  Colors.orangeAccent,
+                ],
+              ),
+            ),
+          ),
+          leading: IconButton(
+            icon: Image.asset('assets/images/reddit-logo.png'),
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {},
+            ),
+          ],
         ),
+      ),
+      body: ListView.builder(
+        itemCount: userposts.length,
+        itemBuilder: (context, index) {
+          return PostItem(userposts[index], currentUser, () => changeUpVotes,
+              () => changeDownVotes);
+        },
       ),
     );
   }
