@@ -1,4 +1,4 @@
-name: reddit1
+name: reddit_clone_ui
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -41,6 +41,7 @@ dev_dependencies:
   url_launcher: ^6.1.2
   email_validator: ^2.0.1
   arculus_auth_widgets: ^1.0.0
+  intl: ^0.17.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
