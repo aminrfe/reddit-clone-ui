@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '/Pages/setting_page.dart';
 import '/Models/user_model.dart';
 import '/Pages/feed_page.dart';
+import '/Pages/add_post.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
@@ -11,7 +12,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   UserModel currentUser;
   int selectedIndex = 0;
 
@@ -20,13 +20,20 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _pages = <Widget>[
     FeedPage(),
     Center(child: Text('Forums Page')),
-    Center(child: Text('Add Post Page')),
+    // AddPost(),
     SettingPage(),
   ];
 
   void onTapped(int index) {
     setState(() {
-      controller.jumpToPage(index);
+      if (index == 2) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AddPost()),
+        );
+      } else {
+        controller.jumpToPage(index);
+      }
     });
   }
 
@@ -48,7 +55,7 @@ class _HomePageState extends State<HomePage> {
         type: BottomNavigationBarType.fixed,
         showSelectedLabels: false,
         showUnselectedLabels: false,
-        unselectedIconTheme: IconThemeData(
+        unselectedIconTheme: const IconThemeData(
           color: Colors.black26,
         ),
         iconSize: 30,
@@ -69,9 +76,9 @@ class _HomePageState extends State<HomePage> {
             label: '',
           ),
           BottomNavigationBarItem(
-          icon: Icon(Icons.settings),
-          activeIcon: Icon(Icons.settings, color: Colors.deepOrange),
-          label: '',
+            icon: Icon(Icons.settings),
+            activeIcon: Icon(Icons.settings, color: Colors.deepOrange),
+            label: '',
           ),
         ],
         currentIndex: selectedIndex,
