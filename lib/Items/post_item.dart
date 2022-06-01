@@ -4,12 +4,14 @@ import '/Models/post_model.dart';
 import '/Models/user_model.dart';
 
 class PostItem extends StatelessWidget {
-  PostItem(this.post, this.currentUser, this.changeUpVotes, this.changeDownVotes);
+  PostItem(this.post, this.currentUser, this.changeUpVotes,
+      this.changeDownVotes, this.savePost);
 
   final PostModel post;
   final UserModel currentUser;
   final Function changeUpVotes;
   final Function changeDownVotes;
+  final Function savePost;
 
   @override
   Widget build(BuildContext context) {
@@ -17,34 +19,49 @@ class PostItem extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(4.0, 4.0, 4.0, 0.0),
       child: GestureDetector(
         child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(2),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey[300],
-                blurRadius: 5.0,
-                spreadRadius: 1.0,
-                offset: Offset(
-                  0.0,
-                  1.0,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(2),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey[300],
+                  blurRadius: 5.0,
+                  spreadRadius: 1.0,
+                  offset: Offset(
+                    0.0,
+                    1.0,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          child: Column(
-            children: [
+              ],
+            ),
+            child: Column(
+              children: [
                 ListTile(
                   horizontalTitleGap: 5,
-                  leading: Icon(Icons.account_circle_rounded, size: 40, color: Colors.black54,),
-                  title: Text('r/'+post.forum.forumName, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-                  subtitle: Text('u/'+ post.user.username +' . '+ DateFormat('yyyy-MM-dd – kk:mm').format(post.date), style: TextStyle(fontSize: 13),),
+                  leading: const Icon(
+                    Icons.account_circle_rounded,
+                    size: 40,
+                    color: Colors.black54,
+                  ),
+                  title: Text(
+                    'r/' + post.forum.name,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                    'u/' +
+                        post.user.username +
+                        ' . ' +
+                        DateFormat('yyyy-MM-dd – kk:mm').format(post.date),
+                    style: const TextStyle(fontSize: 15, color: Colors.black45),
+                  ),
                 ),
                 Row(
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 20),
-                      child: Text(post.desc),
+                      child:
+                          Text(post.desc, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     ),
                   ],
                 ),
@@ -54,14 +71,21 @@ class PostItem extends StatelessWidget {
                     Row(
                       children: [
                         IconButton(
-                          icon: post.upvotes.contains(currentUser)? Icon(Icons.arrow_upward, color: Colors.deepOrange): Icon(Icons.arrow_upward,color: Colors.black),
+                          icon: post.upvotes.contains(currentUser)
+                              ? const Icon(Icons.arrow_upward,
+                                  color: Colors.deepOrange)
+                              : const Icon(Icons.arrow_upward, color: Colors.black),
                           onPressed: () {
                             changeUpVotes();
                           },
                         ),
-                        Text((post.upvotes.length- post.downvotes.length).toString()),
+                        Text((post.upvotes.length - post.downvotes.length)
+                            .toString()),
                         IconButton(
-                          icon: post.downvotes.contains(currentUser)? Icon(Icons.arrow_downward, color: Colors.purple): Icon(Icons.arrow_downward, color: Colors.black),
+                          icon: post.downvotes.contains(currentUser)
+                              ? const Icon(Icons.arrow_downward,
+                                  color: Colors.purple)
+                              : const Icon(Icons.arrow_downward, color: Colors.black),
                           onPressed: () {
                             changeDownVotes();
                           },
@@ -71,24 +95,26 @@ class PostItem extends StatelessWidget {
                     Row(
                       children: [
                         IconButton(
-                          icon: Icon(Icons.mode_comment_outlined),
-
+                          icon: const Icon(Icons.mode_comment_outlined),
                           onPressed: () {},
                         ),
                         Text(post.comments.length.toString()),
                       ],
                     ),
                     IconButton(
-                        icon: currentUser.savedPosts.contains(post) ? Icon(Icons.bookmark) : Icon(Icons.bookmark_border),
-                        onPressed: (){},
+                      icon: currentUser.savedPosts.contains(post)
+                          ? const Icon(Icons.bookmark)
+                          : const Icon(Icons.bookmark_border),
+                      onPressed: () {
+                        savePost();
+                      },
                     ),
                   ],
                 ),
-            ],
-          )
-        ),
+              ],
+            )),
         onTap: () {
-
+          //ToDo: Navigate to post deatails page
         },
       ),
     );

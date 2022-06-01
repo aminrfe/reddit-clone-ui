@@ -42,6 +42,8 @@ dev_dependencies:
   email_validator: ^2.0.1
   arculus_auth_widgets: ^1.0.0
   intl: ^0.17.0
+  sliverbar_with_card: ^0.1.5
+  google_fonts: ^3.0.1
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

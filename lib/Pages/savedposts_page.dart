@@ -10,6 +10,7 @@ class SavedPostsPage extends StatefulWidget {
 }
 
 class _SavedPostsPageState extends State<SavedPostsPage> {
+  
   UserModel currentUser = UserModel('Amin rafiee', '', '', [], [], [
     PostModel(
         "title1",
@@ -65,13 +66,34 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
 
   void changeUpVotes(int index) {
     setState(() {
-      currentUser.savedPosts[index].addUpvote(currentUser);
+      if (currentUser.savedPosts[index].upvotes.contains(currentUser)) {
+        currentUser.savedPosts[index].upvotes.remove(currentUser);
+      } else if (currentUser.savedPosts[index].downvotes
+          .contains(currentUser)) {
+        currentUser.savedPosts[index].downvotes.remove(currentUser);
+        currentUser.savedPosts[index].upvotes.add(currentUser);
+      } else {
+        currentUser.savedPosts[index].upvotes.add(currentUser);
+      }
     });
   }
 
   void changeDownVotes(int index) {
     setState(() {
-      currentUser.savedPosts[index].addDownvote(currentUser);
+      if (currentUser.savedPosts[index].downvotes.contains(currentUser)) {
+        currentUser.savedPosts[index].downvotes.remove(currentUser);
+      } else if (currentUser.savedPosts[index].upvotes.contains(currentUser)) {
+        currentUser.savedPosts[index].upvotes.remove(currentUser);
+        currentUser.savedPosts[index].downvotes.add(currentUser);
+      } else {
+        currentUser.savedPosts[index].downvotes.add(currentUser);
+      }
+    });
+  }
+
+  void savePost(int index) {
+    setState(() {
+      currentUser.addSavedPost(currentUser.savedPosts[index]);
     });
   }
 
@@ -97,8 +119,12 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
       body: ListView.builder(
         itemCount: currentUser.savedPosts.length,
         itemBuilder: (context, index) {
-          return PostItem(currentUser.savedPosts[index], currentUser,
-              () => changeUpVotes, () => changeDownVotes);
+          return PostItem(
+              currentUser.savedPosts[index],
+              currentUser,
+              () => changeUpVotes(index),
+              () => changeDownVotes(index),
+              () => savePost(index));
         },
       ),
     );

@@ -69,13 +69,33 @@ class _FeedPageState extends State<FeedPage> {
 
   void changeUpVotes(int index) {
     setState(() {
-      userposts[index].addUpvote(currentUser);
+      if (userposts[index].upvotes.contains(currentUser)) {
+        userposts[index].upvotes.remove(currentUser);
+      } else if (userposts[index].downvotes.contains(currentUser)) {
+        userposts[index].downvotes.remove(currentUser);
+        userposts[index].upvotes.add(currentUser);
+      } else {
+        userposts[index].upvotes.add(currentUser);
+      }
     });
   }
 
   void changeDownVotes(int index) {
     setState(() {
-      userposts[index].addDownvote(currentUser);
+      if (userposts[index].downvotes.contains(currentUser)) {
+        userposts[index].downvotes.remove(currentUser);
+      } else if (userposts[index].upvotes.contains(currentUser)) {
+        userposts[index].upvotes.remove(currentUser);
+        userposts[index].downvotes.add(currentUser);
+      } else {
+        userposts[index].downvotes.add(currentUser);
+      }
+    });
+  }
+
+  void savePost(int index) {
+    setState(() {
+      currentUser.addSavedPost(userposts[index]);
     });
   }
 
@@ -109,8 +129,12 @@ class _FeedPageState extends State<FeedPage> {
       body: ListView.builder(
         itemCount: userposts.length,
         itemBuilder: (context, index) {
-          return PostItem(userposts[index], currentUser, () => changeUpVotes,
-              () => changeDownVotes);
+          return PostItem(
+              userposts[index],
+              currentUser,
+              () => changeUpVotes(index),
+              () => changeDownVotes(index),
+              () => savePost(index));
         },
       ),
     );
