@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import '/Pages/setting_page.dart';
 import '/Models/user_model.dart';
+import '/Pages/setting_page.dart';
 import '/Pages/feed_page.dart';
 import '/Pages/add_post.dart';
+import '/Pages/forums_list.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
@@ -19,8 +20,8 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> _pages = <Widget>[
     FeedPage(),
-    Center(child: Text('Forums Page')),
-    // AddPost(),
+    ForumsList(),
+    AddPost(),
     SettingPage(),
   ];
 
