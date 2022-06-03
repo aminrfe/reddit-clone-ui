@@ -6,8 +6,9 @@ class UserModel {
   String _username;
   String _password;
   String _email;
-  ImageProvider _avatar;
+  Image _avatar;
   List<ForumModel> _followedForums;
+  List<ForumModel> _favoriteForums;
   List<PostModel> _posts;
   List<PostModel> _savedPosts;
 
@@ -32,8 +33,8 @@ class UserModel {
     _email = email;
   }
 
-  ImageProvider get avatar => _avatar;
-  set avatar(ImageProvider avatar) {
+  Image get avatar => _avatar;
+  set avatar(Image avatar) {
     _avatar = avatar;
   }
 
@@ -42,13 +43,12 @@ class UserModel {
   set followedForums(List<ForumModel> followedForums) {
     _followedForums = followedForums;
   }
+  
 
-  addFollowedForum(ForumModel forum) {
-    if (!_followedForums.contains(forum)) {
-      _followedForums.add(forum);
-    } else {
-      _followedForums.remove(forum);
-    }
+  List<ForumModel> get favoriteForums => _favoriteForums;
+
+  set favoriteForums(List<ForumModel> favoriteForums) {
+    _favoriteForums = favoriteForums;
   }
 
   List<PostModel> get posts => _posts;

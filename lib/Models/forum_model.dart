@@ -4,7 +4,7 @@ import 'user_model.dart';
 
 class ForumModel {
   String _name;
-  ImageProvider _avatar;
+  Image _avatar;
   String _desc;
   UserModel _admin;
   List<PostModel> _posts;
@@ -23,8 +23,8 @@ class ForumModel {
     _desc = desc;
   }
 
-  ImageProvider get avatar => _avatar;
-  set avatar(ImageProvider avatar) {
+  Image get avatar => _avatar;
+  set avatar(Image avatar) {
     _avatar = avatar;
   }
 
