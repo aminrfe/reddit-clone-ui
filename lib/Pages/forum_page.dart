@@ -5,8 +5,9 @@ import '/Models/post_model.dart';
 import '/Items/forum_item.dart';
 
 class ForumPage extends StatefulWidget {
-  
-  
+  const ForumPage({Key key, this.currentForumm}) : super(key: key);
+  final ForumModel currentForumm;
+
   @override
   State<ForumPage> createState() => _ForumPageState();
 }
@@ -351,8 +352,7 @@ class _ForumPageState extends State<ForumPage> {
                         radius: 26,
                         backgroundColor: Colors.deepOrange,
                         backgroundImage:
-                            Image.asset('assets/images/reddit-logo.png')
-                                .image,
+                            Image.asset('assets/images/reddit-logo.png').image,
                       ),
                     ),
                   ),

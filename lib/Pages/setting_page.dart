@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '/Pages/profile_page.dart';
+import '/Pages/savedposts_page.dart';
 import '/Models/user_model.dart';
 
 class SettingPage extends StatelessWidget {
@@ -38,7 +40,8 @@ class SettingPage extends StatelessWidget {
                 ),
                 leading: Icon(Icons.account_circle),
                 onTap: () {
-                  Navigator.pushNamed(context, '/ProfilePage');
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => ProfilePage()));
                 },
               ),
               ListTile(
@@ -64,7 +67,9 @@ class SettingPage extends StatelessWidget {
                 ),
                 leading: Icon(Icons.bookmark_border),
                 onTap: () {
-                  Navigator.pushNamed(context, '/SavedPostsPage');
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return SavedPostsPage();
+                  }));
                 },
               ),
               ListTile(
