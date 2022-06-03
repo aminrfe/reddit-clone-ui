@@ -12,6 +12,24 @@ class AddPost extends StatefulWidget {
 }
 
 class _AddPostState extends State<AddPost> {
+  List<ForumModel> forums = [
+    ForumModel(
+        'Programming',
+        'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.',
+        UserModel('Amin Rafiee', '88', '', [], [], []), []),
+    ForumModel(
+        'vim',
+        'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.',
+        UserModel('Amin Rafiee', '88', '', [], [], []), []),
+    ForumModel(
+        'Dota2',
+        'Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.',
+        UserModel('Amin Rafiee', '88', '', [], [], []), []),
+    ForumModel(
+        'Nasa',
+        'Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu.',
+        UserModel('Amin Rafiee', '88', '', [], [], []), [])
+  ];
   bool isNextActive = false;
   UserModel currentUser;
   ForumModel currentForum;
@@ -21,6 +39,8 @@ class _AddPostState extends State<AddPost> {
 
   @override
   void initState() {
+    currentUser = UserModel('Amin Rafiee', '88', '', forums, [], []);
+    
     titleController = TextEditingController();
     descController = TextEditingController();
     currentForum = (currentUser.followedForums != null)
@@ -99,7 +119,6 @@ class _AddPostState extends State<AddPost> {
                                   color: isNextActive
                                       ? Colors.deepOrange
                                       : Colors.grey[300])),
-                          // primary: ,
                           primary: isNextActive ? Colors.white : Colors.grey,
                           backgroundColor: isNextActive
                               ? Colors.deepOrange
@@ -133,9 +152,10 @@ class _AddPostState extends State<AddPost> {
                                             size: 30),
                                         title: Text("r/" + forum.name,
                                             style: const TextStyle(
-                                                fontSize: 17,
+                                                fontSize: 16,
                                                 fontWeight: FontWeight.bold)),
                                         horizontalTitleGap: 0,
+                                        visualDensity: VisualDensity.compact,
                                       ),
                                     ))
                                 .toList()
@@ -190,9 +210,6 @@ class _AddPostState extends State<AddPost> {
                           color: Colors.black45,
                         )),
                   ),
-                  // SizedBox(
-                  //   height: 10,
-                  // ),
                   TextField(
                     controller: descController,
                     maxLines: null,
