@@ -101,8 +101,8 @@ class _AddPostState extends State<AddPost> {
                                     <UserModel>[],
                                     <UserModel>[],
                                     <CommentModel>[]);
-                                currentForum.addPost(post);
-                                currentUser.addPost(post);
+                                currentForum.posts.add(post);
+                                currentUser.posts.add(post);
 
                                 titleController.clear();
                                 descController.clear();

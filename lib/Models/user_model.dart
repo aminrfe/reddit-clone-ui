@@ -43,7 +43,6 @@ class UserModel {
   set followedForums(List<ForumModel> followedForums) {
     _followedForums = followedForums;
   }
-  
 
   List<ForumModel> get favoriteForums => _favoriteForums;
 
@@ -55,10 +54,6 @@ class UserModel {
 
   set posts(List<PostModel> posts) {
     _posts = posts;
-  }
-
-  addPost(PostModel post) {
-    _posts.add(post);
   }
 
   List<PostModel> get savedPosts => _savedPosts;

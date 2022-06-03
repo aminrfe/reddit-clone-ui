@@ -50,26 +50,10 @@ class PostModel {
     _upvotes = upvotes;
   }
 
-  addUpvote(UserModel user) {
-    if(!_upvotes.contains(user)) {
-      _upvotes.add(user);
-    } else {
-      _upvotes.remove(user);
-    }
-  }
-
   List<UserModel> get downvotes => _downvotes;
 
   set downvotes(List<UserModel> downvotes) {
     _downvotes = downvotes;
-  }
-
-  addDownvote(UserModel user) {
-    if(!_downvotes.contains(user)) {
-      _downvotes.add(user);
-    } else {
-      _downvotes.remove(user);
-    }
   }
 
   List<CommentModel> get comments => _comments;
@@ -77,12 +61,5 @@ class PostModel {
   set comments(List<CommentModel> comments) {
     _comments = comments;
   }
-
-  addComment(CommentModel comment) {
-    _comments.add(comment);
-  }
-
-
-
 
 }
