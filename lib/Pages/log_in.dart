@@ -324,7 +324,7 @@ class _LogInState extends State<LogIn> {
                                   fontWeight: FontWeight.bold)),
                           content: const Text("Please fill all the fields"),
                           actions: [
-                            FlatButton(
+                            TextButton(
                               child: const Text("Ok"),
                               onPressed: () {
                                 Navigator.of(context).pop();
@@ -347,7 +347,7 @@ class _LogInState extends State<LogIn> {
                             "Password must contain at least one number, one lowercase and one uppercase letter",
                           ),
                           actions: [
-                            FlatButton(
+                            TextButton(
                               child: const Text("Ok"),
                               onPressed: () {
                                 Navigator.of(context).pop();

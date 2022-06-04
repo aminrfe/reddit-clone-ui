@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
+import '../data.dart';
 import '/Models/user_model.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -8,8 +9,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  UserModel currentUser = UserModel(
-      'Amin Rafiee', 'amin8712R', 'aminrafiee36@gmail.com', [], [], []);
+  final UserModel currentUser = Data().currentUser;
 
   bool _isObscure = true;
   bool invalidEmail = false;
@@ -232,7 +232,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 content:
                                     const Text("Please fill all the fields"),
                                 actions: [
-                                  FlatButton(
+                                  TextButton(
                                     child: const Text("Ok"),
                                     onPressed: () {
                                       Navigator.of(context).pop();
@@ -255,7 +255,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 content:
                                     const Text("Please enter a valid email"),
                                 actions: [
-                                  FlatButton(
+                                  TextButton(
                                     child: const Text("Ok"),
                                     onPressed: () {
                                       Navigator.of(context).pop();
@@ -278,7 +278,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   "Password must contain at least one number, one lowercase and one uppercase letter",
                                 ),
                                 actions: [
-                                  FlatButton(
+                                  TextButton(
                                     child: const Text("Ok"),
                                     onPressed: () {
                                       Navigator.of(context).pop();
