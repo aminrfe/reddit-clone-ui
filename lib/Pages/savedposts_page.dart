@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import '/Models/forum_model.dart';
-import '/Models/post_model.dart';
 import '/Models/user_model.dart';
 import '/Items/post_item.dart';
+import '../data.dart';
 
 class SavedPostsPage extends StatefulWidget {
   @override
@@ -10,59 +9,7 @@ class SavedPostsPage extends StatefulWidget {
 }
 
 class _SavedPostsPageState extends State<SavedPostsPage> {
-  
-  UserModel currentUser = UserModel('Amin rafiee', '', '', [], [], [
-    PostModel(
-        "title1",
-        'This is a test for reddit ui.\nIt is second line of text.',
-        ForumModel('Programming', 'Desc',
-            UserModel('Amin Rafiee', '88', '', [], [], []), []),
-        UserModel('Amin rafiee', '', '', [], [], []),
-        DateTime.now(),
-        [],
-        [],
-        []),
-    PostModel(
-        "title1",
-        'This is a test for reddit ui.\nIt is second line of text.',
-        ForumModel('Programming', 'Desc',
-            UserModel('Amin Rafiee', '88', '', [], [], []), []),
-        UserModel('Amin rafiee', '', '', [], [], []),
-        DateTime.now(),
-        [],
-        [],
-        []),
-    PostModel(
-        "title1",
-        'This is a test for reddit ui.\nIt is second line of text.',
-        ForumModel('Programming', 'Desc',
-            UserModel('Amin Rafiee', '88', '', [], [], []), []),
-        UserModel('Amin rafiee', '', '', [], [], []),
-        DateTime.now(),
-        [],
-        [],
-        []),
-    PostModel(
-        "title1",
-        'This is a test for reddit ui.\nIt is second line of text.',
-        ForumModel('Programming', 'Desc',
-            UserModel('Amin Rafiee', '88', '', [], [], []), []),
-        UserModel('Amin rafiee', '', '', [], [], []),
-        DateTime.now(),
-        [],
-        [],
-        []),
-    PostModel(
-        "title1",
-        'This is a test for reddit ui.\nIt is second line of text.',
-        ForumModel('Programming', 'Desc',
-            UserModel('Amin Rafiee', '88', '', [], [], []), []),
-        UserModel('Amin rafiee', '', '', [], [], []),
-        DateTime.now(),
-        [],
-        [],
-        []),
-  ]);
+  final UserModel currentUser = Data().currentUser;
 
   void changeUpVotes(int index) {
     setState(() {

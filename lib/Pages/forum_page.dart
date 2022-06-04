@@ -1,120 +1,58 @@
 import 'package:flutter/material.dart';
+import '../data.dart';
 import '/Models/forum_model.dart';
 import '/Models/user_model.dart';
 import '/Models/post_model.dart';
 import '/Items/forum_item.dart';
 
 class ForumPage extends StatefulWidget {
-  const ForumPage({Key key, this.currentForumm}) : super(key: key);
-  final ForumModel currentForumm;
+  const ForumPage({Key key, this.currentForum}) : super(key: key);
+  final ForumModel currentForum;
 
   @override
   State<ForumPage> createState() => _ForumPageState();
 }
 
 class _ForumPageState extends State<ForumPage> {
-  UserModel currentUser = UserModel('Amin rafiee', '', '', [], [], []);
-  ForumModel currentForum = ForumModel(
-      'Nasa',
-      'NASA is for anything related to the National Aeronautics and Space Administration; the latest news, events, current and future missions, and more.',
-      UserModel('Amin rafiee', '', '', [], [], []), [
-    PostModel(
-        'title1',
-        'This is a test for reddit ui.\nIt is second line of text.',
-        ForumModel(
-            'Nasa', 'Desc', UserModel('Amin Rafiee', '88', '', [], [], []), []),
-        UserModel('Amin rafiee', '', '', [], [], []),
-        DateTime.now(),
-        [],
-        [],
-        []),
-    PostModel(
-        'title1',
-        'This is a test for reddit ui.\nIt is second line of text.',
-        ForumModel(
-            'Nasa', 'Desc', UserModel('Amin Rafiee', '88', '', [], [], []), []),
-        UserModel('Amin rafiee', '', '', [], [], []),
-        DateTime.now(),
-        [],
-        [],
-        []),
-    PostModel(
-        'title1',
-        'This is a test for reddit ui.\nIt is second line of text.',
-        ForumModel(
-            'Nasa', 'Desc', UserModel('Amin Rafiee', '88', '', [], [], []), []),
-        UserModel('Amin rafiee', '', '', [], [], []),
-        DateTime.now(),
-        [],
-        [],
-        []),
-    PostModel(
-        'title1',
-        'This is a test for reddit ui.\nIt is second line of text.',
-        ForumModel(
-            'Nasa', 'Desc', UserModel('Amin Rafiee', '88', '', [], [], []), []),
-        UserModel('Amin rafiee', '', '', [], [], []),
-        DateTime.now(),
-        [],
-        [],
-        []),
-    PostModel(
-        'title1',
-        'This is a test for reddit ui.\nIt is second line of text.',
-        ForumModel(
-            'Nasa', 'Desc', UserModel('Amin Rafiee', '88', '', [], [], []), []),
-        UserModel('Amin rafiee', '', '', [], [], []),
-        DateTime.now(),
-        [],
-        [],
-        []),
-    PostModel(
-        'title1',
-        'This is a test for reddit ui.\nIt is second line of text.',
-        ForumModel('Programming', 'Desc',
-            UserModel('Amin Rafiee', '88', '', [], [], []), []),
-        UserModel('Amin rafiee', '', '', [], [], []),
-        DateTime.now(),
-        [],
-        [],
-        [])
-  ]);
+  final UserModel currentUser = Data().currentUser;
 
   void changeUpVotes(int index) {
     setState(() {
-      if (currentForum.posts[index].upvotes.contains(currentUser)) {
-        currentForum.posts[index].upvotes.remove(currentUser);
-      } else if (currentForum.posts[index].downvotes.contains(currentUser)) {
-        currentForum.posts[index].downvotes.remove(currentUser);
-        currentForum.posts[index].upvotes.add(currentUser);
+      if (widget.currentForum.posts[index].upvotes.contains(currentUser)) {
+        widget.currentForum.posts[index].upvotes.remove(currentUser);
+      } else if (widget.currentForum.posts[index].downvotes
+          .contains(currentUser)) {
+        widget.currentForum.posts[index].downvotes.remove(currentUser);
+        widget.currentForum.posts[index].upvotes.add(currentUser);
       } else {
-        currentForum.posts[index].upvotes.add(currentUser);
+        widget.currentForum.posts[index].upvotes.add(currentUser);
       }
     });
   }
 
   void changeDownVotes(int index) {
     setState(() {
-      if (currentForum.posts[index].downvotes.contains(currentUser)) {
-        currentForum.posts[index].downvotes.remove(currentUser);
-      } else if (currentForum.posts[index].upvotes.contains(currentUser)) {
-        currentForum.posts[index].upvotes.remove(currentUser);
-        currentForum.posts[index].downvotes.add(currentUser);
+      if (widget.currentForum.posts[index].downvotes.contains(currentUser)) {
+        widget.currentForum.posts[index].downvotes.remove(currentUser);
+      } else if (widget.currentForum.posts[index].upvotes
+          .contains(currentUser)) {
+        widget.currentForum.posts[index].upvotes.remove(currentUser);
+        widget.currentForum.posts[index].downvotes.add(currentUser);
       } else {
-        currentForum.posts[index].downvotes.add(currentUser);
+        widget.currentForum.posts[index].downvotes.add(currentUser);
       }
     });
   }
 
   void removePost(int index) {
     setState(() {
-      currentForum.posts.removeAt(index);
+      widget.currentForum.posts.removeAt(index);
     });
   }
 
   void savePost(int index) {
     setState(() {
-      currentUser.addSavedPost(currentForum.posts[index]);
+      currentUser.addSavedPost(widget.currentForum.posts[index]);
     });
   }
 
@@ -122,8 +60,10 @@ class _ForumPageState extends State<ForumPage> {
   TextEditingController _forumDescController;
   @override
   void initState() {
-    _forumNameController = TextEditingController(text: currentForum.name);
-    _forumDescController = TextEditingController(text: currentForum.desc);
+    _forumNameController =
+        TextEditingController(text: widget.currentForum.name);
+    _forumDescController =
+        TextEditingController(text: widget.currentForum.desc);
     super.initState();
   }
 
@@ -167,7 +107,7 @@ class _ForumPageState extends State<ForumPage> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    'r/' + currentForum.name,
+                                    'r/' + widget.currentForum.name,
                                     style: const TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
@@ -177,12 +117,12 @@ class _ForumPageState extends State<ForumPage> {
                                     child: Center(
                                       child: Text(
                                         currentUser.followedForums
-                                                .contains(currentForum)
+                                                .contains(widget.currentForum)
                                             ? 'Joined'
                                             : 'Join',
                                         style: TextStyle(
                                           color: currentUser.followedForums
-                                                  .contains(currentForum)
+                                                  .contains(widget.currentForum)
                                               ? Colors.white
                                               : Colors.blue,
                                           fontSize: 15,
@@ -193,26 +133,26 @@ class _ForumPageState extends State<ForumPage> {
                                     onPressed: () {
                                       setState(() {
                                         if (currentUser.followedForums
-                                            .contains(currentForum)) {
+                                            .contains(widget.currentForum)) {
                                           currentUser.followedForums
-                                              .remove(currentForum);
+                                              .remove(widget.currentForum);
                                         } else {
                                           currentUser.followedForums
-                                              .add(currentForum);
+                                              .add(widget.currentForum);
                                         }
                                       });
                                     },
                                     style: TextButton.styleFrom(
                                       backgroundColor: currentUser
                                               .followedForums
-                                              .contains(currentForum)
+                                              .contains(widget.currentForum)
                                           ? Colors.blueAccent
                                           : Colors.white,
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(20),
                                         side: BorderSide(
                                           color: currentUser.followedForums
-                                                  .contains(currentForum)
+                                                  .contains(widget.currentForum)
                                               ? Colors.white
                                               : Colors.blue,
                                           width: 1.5,
@@ -226,7 +166,7 @@ class _ForumPageState extends State<ForumPage> {
                                 height: 20,
                               ),
                               Text(
-                                currentForum.desc,
+                                widget.currentForum.desc,
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 15),
                               ),
@@ -235,7 +175,7 @@ class _ForumPageState extends State<ForumPage> {
                         ),
                         onTap: () {
                           if (currentUser.username ==
-                              currentForum.admin.username) {
+                              widget.currentForum.admin.username) {
                             showModalBottomSheet(
                                 isScrollControlled: true,
                                 context: context,
@@ -287,10 +227,10 @@ class _ForumPageState extends State<ForumPage> {
                                                         fontSize: 15)),
                                                 onPressed: () {
                                                   setState(() {
-                                                    currentForum.name =
+                                                    widget.currentForum.name =
                                                         _forumNameController
                                                             .text;
-                                                    currentForum.desc =
+                                                    widget.currentForum.desc =
                                                         _forumDescController
                                                             .text;
                                                   });
@@ -365,16 +305,16 @@ class _ForumPageState extends State<ForumPage> {
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 return ForumItem(
-                  currentForum.posts[index],
+                  widget.currentForum.posts[index],
                   currentUser,
-                  currentForum,
+                  widget.currentForum,
                   () => changeUpVotes(index),
                   () => changeDownVotes(index),
                   () => removePost(index),
                   () => savePost(index),
                 );
               },
-              childCount: currentForum.posts.length,
+              childCount: widget.currentForum.posts.length,
             ),
           )
         ],

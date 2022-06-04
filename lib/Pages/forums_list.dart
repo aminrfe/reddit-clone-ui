@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:reddit_clone_ui/Pages/search_forums.dart';
+import '../data.dart';
 import '/Models/forum_model.dart';
 import '/Models/user_model.dart';
 import 'forum_page.dart';
-// import '/data.dart';
 
 class ForumsList extends StatefulWidget {
   const ForumsList({Key key}) : super(key: key);
@@ -13,54 +13,12 @@ class ForumsList extends StatefulWidget {
 }
 
 class _ForumsListState extends State<ForumsList> {
-  List<ForumModel> forums = [
-    ForumModel(
-        'Programming',
-        'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.',
-        UserModel('Amin Rafiee', '88', '', [], [], []), []),
-    ForumModel(
-        'vim',
-        'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.',
-        UserModel('Amin Rafiee', '88', '', [], [], []), []),
-    ForumModel(
-        'Dota2',
-        'Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.',
-        UserModel('Amin Rafiee', '88', '', [], [], []), []),
-    ForumModel(
-        'Nasa',
-        'Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu.',
-        UserModel('Amin Rafiee', '88', '', [], [], []), [])
-  ];
-  UserModel currentUser;
+  UserModel currentUser = Data().currentUser;
   List<ForumModel> unfavoritedForums;
   List<Map<String, dynamic>> _items;
 
-  bool isfavorite(ForumModel forum) {
-    return currentUser.favoriteForums.contains(forum);
-  }
-
-  void toggleFavorite(ForumModel forum) {
-    if (currentUser.favoriteForums.contains(forum)) {
-      setState(() {
-        currentUser.favoriteForums.remove(forum);
-        unfavoritedForums.add(forum);
-      });
-
-      unfavoritedForums.sort((a, b) => a.name.compareTo(b.name));
-    } else {
-      setState(() {
-        unfavoritedForums.remove(forum);
-        currentUser.favoriteForums.add(forum);
-      });
-
-      currentUser.favoriteForums.sort((a, b) => a.name.compareTo(b.name));
-    }
-  }
-
   @override
   void initState() {
-    currentUser = UserModel('Amin Rafiee', '88', '', forums, [], []);
-    currentUser.favoriteForums = [forums[0], forums[1]];
     unfavoritedForums = currentUser.followedForums
         .toSet()
         .difference(currentUser.favoriteForums.toSet())
@@ -82,6 +40,28 @@ class _ForumsListState extends State<ForumsList> {
     ];
 
     super.initState();
+  }
+
+  bool isfavorite(ForumModel forum) {
+    return currentUser.favoriteForums.contains(forum);
+  }
+
+  void toggleFavorite(ForumModel forum) {
+    if (currentUser.favoriteForums.contains(forum)) {
+      setState(() {
+        currentUser.favoriteForums.remove(forum);
+        unfavoritedForums.add(forum);
+      });
+
+      unfavoritedForums.sort((a, b) => a.name.compareTo(b.name));
+    } else {
+      setState(() {
+        unfavoritedForums.remove(forum);
+        currentUser.favoriteForums.add(forum);
+      });
+
+      currentUser.favoriteForums.sort((a, b) => a.name.compareTo(b.name));
+    }
   }
 
   @override
@@ -116,7 +96,7 @@ class _ForumsListState extends State<ForumsList> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => ForumPage(
-                                currentForumm: finalResult,
+                                currentForum: finalResult,
                               )),
                     );
                   }
@@ -189,8 +169,7 @@ class _ForumsListState extends State<ForumsList> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => ForumPage(
-                                              currentForumm: item['list']
-                                                  [index],
+                                              currentForum: item['list'][index],
                                             )));
                               },
                             );

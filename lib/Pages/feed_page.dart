@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../data.dart';
 import '/Models/forum_model.dart';
 import '/Models/post_model.dart';
 import '/Models/user_model.dart';
@@ -12,90 +13,46 @@ class FeedPage extends StatefulWidget {
 }
 
 class _FeedPageState extends State<FeedPage> {
-  UserModel currentUser = UserModel('Amin rafiee', '', '', [], [], []);
+  final UserModel currentUser = Data().currentUser;
+  List<PostModel> posts;
 
-  List<PostModel> userposts = [
-    PostModel(
-        "title1",
-        'This is a test for reddit ui.\nIt is second line of text.',
-        ForumModel('Programming', 'Desc',
-            UserModel('Amin Rafiee', '88', '', [], [], []), []),
-        UserModel('Amin rafiee', '', '', [], [], []),
-        DateTime.now(),
-        [],
-        [],
-        []),
-    PostModel(
-        "title1",
-        'This is a test for reddit ui.\nIt is second line of text.',
-        ForumModel('Programming', 'Desc',
-            UserModel('Amin Rafiee', '88', '', [], [], []), []),
-        UserModel('Amin rafiee', '', '', [], [], []),
-        DateTime.now(),
-        [],
-        [],
-        []),
-    PostModel(
-        "title1",
-        'This is a test for reddit ui.\nIt is second line of text.',
-        ForumModel('Programming', 'Desc',
-            UserModel('Amin Rafiee', '88', '', [], [], []), []),
-        UserModel('Amin rafiee', '', '', [], [], []),
-        DateTime.now(),
-        [],
-        [],
-        []),
-    PostModel(
-        "title1",
-        'This is a test for reddit ui.\nIt is second line of text.',
-        ForumModel('Programming', 'Desc',
-            UserModel('Amin Rafiee', '88', '', [], [], []), []),
-        UserModel('Amin rafiee', '', '', [], [], []),
-        DateTime.now(),
-        [],
-        [],
-        []),
-    PostModel(
-        "title1",
-        'This is a test for reddit ui.\nIt is second line of text.',
-        ForumModel('Programming', 'Desc',
-            UserModel('Amin Rafiee', '88', '', [], [], []), []),
-        UserModel('Amin rafiee', '', '', [], [], []),
-        DateTime.now(),
-        [],
-        [],
-        []),
-  ];
+  void initState() {
+    posts = currentUser.followedForums
+        .map((e) => e.posts)
+        .expand((e) => e)
+        .toList();
+    super.initState();
+  }
 
   void changeUpVotes(int index) {
     setState(() {
-      if (userposts[index].upvotes.contains(currentUser)) {
-        userposts[index].upvotes.remove(currentUser);
-      } else if (userposts[index].downvotes.contains(currentUser)) {
-        userposts[index].downvotes.remove(currentUser);
-        userposts[index].upvotes.add(currentUser);
+      if (posts[index].upvotes.contains(currentUser)) {
+        posts[index].upvotes.remove(currentUser);
+      } else if (posts[index].downvotes.contains(currentUser)) {
+        posts[index].downvotes.remove(currentUser);
+        posts[index].upvotes.add(currentUser);
       } else {
-        userposts[index].upvotes.add(currentUser);
+        posts[index].upvotes.add(currentUser);
       }
     });
   }
 
   void changeDownVotes(int index) {
     setState(() {
-      if (userposts[index].downvotes.contains(currentUser)) {
-        userposts[index].downvotes.remove(currentUser);
-      } else if (userposts[index].upvotes.contains(currentUser)) {
-        userposts[index].upvotes.remove(currentUser);
-        userposts[index].downvotes.add(currentUser);
+      if (posts[index].downvotes.contains(currentUser)) {
+        posts[index].downvotes.remove(currentUser);
+      } else if (posts[index].upvotes.contains(currentUser)) {
+        posts[index].upvotes.remove(currentUser);
+        posts[index].downvotes.add(currentUser);
       } else {
-        userposts[index].downvotes.add(currentUser);
+        posts[index].downvotes.add(currentUser);
       }
     });
   }
 
   void savePost(int index) {
     setState(() {
-      currentUser.addSavedPost(userposts[index]);
+      currentUser.addSavedPost(posts[index]);
     });
   }
 
@@ -127,14 +84,10 @@ class _FeedPageState extends State<FeedPage> {
         ),
       ),
       body: ListView.builder(
-        itemCount: userposts.length,
+        itemCount: posts.length,
         itemBuilder: (context, index) {
-          return PostItem(
-              userposts[index],
-              currentUser,
-              () => changeUpVotes(index),
-              () => changeDownVotes(index),
-              () => savePost(index));
+          return PostItem(posts[index], currentUser, () => changeUpVotes(index),
+              () => changeDownVotes(index), () => savePost(index));
         },
       ),
     );

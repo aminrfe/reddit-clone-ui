@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reddit_clone_ui/Models/comment_model.dart';
 import 'package:reddit_clone_ui/Models/post_model.dart';
+import '../data.dart';
 import '/Models/user_model.dart';
 import '/Models/forum_model.dart';
 
@@ -12,26 +13,9 @@ class AddPost extends StatefulWidget {
 }
 
 class _AddPostState extends State<AddPost> {
-  List<ForumModel> forums = [
-    ForumModel(
-        'Programming',
-        'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.',
-        UserModel('Amin Rafiee', '88', '', [], [], []), []),
-    ForumModel(
-        'vim',
-        'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.',
-        UserModel('Amin Rafiee', '88', '', [], [], []), []),
-    ForumModel(
-        'Dota2',
-        'Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.',
-        UserModel('Amin Rafiee', '88', '', [], [], []), []),
-    ForumModel(
-        'Nasa',
-        'Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu.',
-        UserModel('Amin Rafiee', '88', '', [], [], []), [])
-  ];
   bool isNextActive = false;
-  UserModel currentUser;
+  UserModel currentUser = Data().currentUser;
+  List<ForumModel> forums;
   ForumModel currentForum;
 
   TextEditingController titleController;
@@ -39,8 +23,8 @@ class _AddPostState extends State<AddPost> {
 
   @override
   void initState() {
-    currentUser = UserModel('Amin Rafiee', '88', '', forums, [], []);
-    
+    List<ForumModel> forums = Data().currentUser.followedForums;
+
     titleController = TextEditingController();
     descController = TextEditingController();
     currentForum = (currentUser.followedForums != null)
