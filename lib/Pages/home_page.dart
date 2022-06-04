@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import '/Models/user_model.dart';
 import '/Pages/add_post.dart';
-import 'tab_navigator.dart';
+import 'feed_page.dart';
+import 'forums_list.dart';
+import 'setting_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
@@ -12,64 +14,48 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   UserModel currentUser;
-  String currentPage = 'FeedPage';
-  int selectedIndex = 0;
+  String _currentPage = 'FeedPage';
+  int _selectedIndex = 0;
 
-  final List<String> pageKeys = [
+  final List<String> _pageKeys = [
     'FeedPage',
     'ForumsList',
     'AddPost',
     'SettingPage'
   ];
 
-  final Map<String, GlobalKey<NavigatorState>> navigatorKeys = {
+  final Map<String, GlobalKey<NavigatorState>> _navigatorKeys = {
     'FeedPage': GlobalKey<NavigatorState>(),
     'ForumsList': GlobalKey<NavigatorState>(),
     'AddPost': GlobalKey<NavigatorState>(),
     'SettingPage': GlobalKey<NavigatorState>(),
   };
 
-  Widget buildOffstageNavigator(String tabItem) {
-    return Offstage(
-      offstage: currentPage != tabItem,
-      child: TabNavigator(
-        navigatorKey: navigatorKeys[tabItem],
-        tabItem: tabItem,
-      ),
-    );
-  }
-
-  void selectTab(String tabItem, int index) {
-    if (tabItem == currentPage) {
-      navigatorKeys[tabItem].currentState.popUntil((route) => route.isFirst);
-    } else {
-      setState(() {
-        currentPage = pageKeys[index];
-        selectedIndex = index;
-      });
-    }
+  Widget _pageBuilders(String tabItem) {
+    return {
+      'FeedPage': FeedPage(),
+      'ForumsList': ForumsList(),
+      'AddPost': AddPost(),
+      'SettingPage': SettingPage(onNext: _next),
+    }[tabItem];
   }
 
   final List<Map<String, dynamic>> _items = [
     {
       'icon': Icons.home_outlined,
       'activeIcon': Icons.home,
-      'color': Colors.deepOrange,
     },
     {
       'icon': Icons.list_alt,
       'activeIcon': Icons.list_alt,
-      'color': Colors.deepOrange,
     },
     {
       'icon': Icons.add,
       'activeIcon': Icons.add,
-      'color': Colors.deepOrange,
     },
     {
       'icon': Icons.settings,
       'activeIcon': Icons.settings,
-      'color': Colors.deepOrange,
     },
   ];
 
@@ -78,23 +64,21 @@ class _HomePageState extends State<HomePage> {
     return WillPopScope(
       onWillPop: () async {
         final isFirstRouteInCurrentTab =
-            !await navigatorKeys[currentPage].currentState.maybePop();
-        if (isFirstRouteInCurrentTab) {
-          if (currentPage != "Page1") {
-            selectTab("Page1", 1);
+            !await _navigatorKeys[_currentPage].currentState.maybePop();
+        if (isFirstRouteInCurrentTab && _currentPage != "FeedPage") {
+          _selectTab("FeedPage", 0);
 
-            return false;
-          }
+          return false;
         }
         return isFirstRouteInCurrentTab;
       },
       child: Scaffold(
         body: Stack(
           children: [
-            buildOffstageNavigator('FeedPage'),
-            buildOffstageNavigator('ForumsList'),
-            buildOffstageNavigator('AddPost'),
-            buildOffstageNavigator('SettingPage'),
+            _buildOffstageNavigator('FeedPage'),
+            _buildOffstageNavigator('ForumsList'),
+            _buildOffstageNavigator('AddPost'),
+            _buildOffstageNavigator('SettingPage'),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
@@ -108,24 +92,51 @@ class _HomePageState extends State<HomePage> {
           items: _items.map((item) {
             return BottomNavigationBarItem(
               icon: Icon(item['icon']),
-              activeIcon: Icon(item['activeIcon'], color: item['color']),
+              activeIcon: Icon(item['activeIcon'], color: Colors.deepOrange),
               label: '',
             );
           }).toList(),
           selectedItemColor: Colors.black,
           onTap: (int index) {
-            if (index == 2) {
+            if (_pageKeys[index] == 'AddPost') {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => AddPost()),
               );
             } else {
-              selectTab(pageKeys[index], index);
+              _selectTab(_pageKeys[index], index);
             }
           },
-          currentIndex: selectedIndex,
+          currentIndex: _selectedIndex,
         ),
       ),
     );
+  }
+
+  void _selectTab(String tabItem, int index) {
+    if (tabItem == _currentPage) {
+      _navigatorKeys[tabItem].currentState.popUntil((route) => route.isFirst);
+    } else {
+      setState(() {
+        _currentPage = _pageKeys[index];
+        _selectedIndex = index;
+      });
+    }
+  }
+
+  void _next(Widget page) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+  }
+
+  Widget _buildOffstageNavigator(String tabItem) {
+    return Offstage(
+        offstage: _currentPage != tabItem,
+        child: Navigator(
+          key: _navigatorKeys[tabItem],
+          onGenerateRoute: (routeSettings) {
+            return MaterialPageRoute(
+                builder: (context) => _pageBuilders(tabItem));
+          },
+        ));
   }
 }

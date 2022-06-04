@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import '../data.dart';
 import '/Pages/profile_page.dart';
 import '/Pages/savedposts_page.dart';
 import '/Models/user_model.dart';
 
 class SettingPage extends StatelessWidget {
-  final UserModel currentUser = UserModel('Amin rafiee', '', '', [], [], []);
+  SettingPage({Key key, this.onNext}) : super(key: key);
+  final Function onNext;
+
+  final UserModel currentUser = Data().currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +44,7 @@ class SettingPage extends StatelessWidget {
                 ),
                 leading: Icon(Icons.account_circle),
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ProfilePage()));
+                  onNext(ProfilePage());
                 },
               ),
               ListTile(
@@ -67,9 +70,7 @@ class SettingPage extends StatelessWidget {
                 ),
                 leading: Icon(Icons.bookmark_border),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return SavedPostsPage();
-                  }));
+                  onNext(SavedPostsPage());
                 },
               ),
               ListTile(

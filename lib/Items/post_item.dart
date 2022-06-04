@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:reddit_clone_ui/Pages/page_detail.dart';
 import '/Models/post_model.dart';
 import '/Models/user_model.dart';
 
@@ -40,7 +41,7 @@ class PostItem extends StatelessWidget {
                   horizontalTitleGap: 5,
                   leading: const Icon(
                     Icons.account_circle_rounded,
-                    size: 40,
+                    size: 35,
                     color: Colors.black54,
                   ),
                   title: Text(
@@ -60,8 +61,9 @@ class PostItem extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 20),
-                      child:
-                          Text(post.desc, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      child: Text(post.title,
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold)),
                     ),
                   ],
                 ),
@@ -74,7 +76,8 @@ class PostItem extends StatelessWidget {
                           icon: post.upvotes.contains(currentUser)
                               ? const Icon(Icons.arrow_upward,
                                   color: Colors.deepOrange)
-                              : const Icon(Icons.arrow_upward, color: Colors.black),
+                              : const Icon(Icons.arrow_upward,
+                                  color: Colors.black),
                           onPressed: () {
                             changeUpVotes();
                           },
@@ -85,7 +88,8 @@ class PostItem extends StatelessWidget {
                           icon: post.downvotes.contains(currentUser)
                               ? const Icon(Icons.arrow_downward,
                                   color: Colors.purple)
-                              : const Icon(Icons.arrow_downward, color: Colors.black),
+                              : const Icon(Icons.arrow_downward,
+                                  color: Colors.black),
                           onPressed: () {
                             changeDownVotes();
                           },
@@ -114,6 +118,9 @@ class PostItem extends StatelessWidget {
               ],
             )),
         onTap: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return PostDetail(currentPost: post);
+          }));
           //ToDo: Navigate to post deatails page
         },
       ),
