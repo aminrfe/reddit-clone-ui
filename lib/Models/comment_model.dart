@@ -6,6 +6,7 @@ class CommentModel {
   DateTime _date;
   List<UserModel> _upvotes;
   List<UserModel> _downvotes;
+  List<CommentModel> _replies;
 
   CommentModel(
       this._user, this._comment, this._date, this._upvotes, this._downvotes);
@@ -34,25 +35,15 @@ class CommentModel {
     _upvotes = upvotes;
   }
 
-  addUpvote(UserModel user) {
-    if (!_upvotes.contains(user)) {
-      _upvotes.add(user);
-    } else {
-      _upvotes.remove(user);
-    }
-  }
-
   List<UserModel> get downvotes => _downvotes;
 
   set downvotes(List<UserModel> downvotes) {
     _downvotes = downvotes;
   }
 
-  addDownvote(UserModel user) {
-    if (!_downvotes.contains(user)) {
-      _downvotes.add(user);
-    } else {
-      _downvotes.remove(user);
-    }
+  List<CommentModel> get replies => _replies;
+
+  set replies(List<CommentModel> replies) {
+    _replies = replies;
   }
 }
