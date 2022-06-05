@@ -28,9 +28,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    _emailController = TextEditingController();
-    _usernameController = TextEditingController();
-    _passwordController = TextEditingController();
+    _emailController = TextEditingController(text: currentUser.email);
+    _usernameController = TextEditingController(text: currentUser.username);
+    _passwordController = TextEditingController(text: currentUser.password);
     super.initState();
   }
 
@@ -81,7 +81,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         fontSize: 15,
                         color: Colors.black45,
                       ),
-                      hintText: currentUser.email,
+                      // hintText: currentUser.email,
                       filled: true,
                       fillColor: Colors.grey[150],
                       focusedBorder: OutlineInputBorder(
@@ -119,7 +119,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         fontSize: 15,
                         color: Colors.black45,
                       ),
-                      hintText: currentUser.username,
+                      // hintText: currentUser.username,
                       filled: true,
                       fillColor: Colors.grey[150],
                       focusedBorder: OutlineInputBorder(
@@ -187,7 +187,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 const SizedBox(
-                  height: 300,
+                  height: 350,
                 ),
                 Row(
                   children: [
@@ -289,15 +289,15 @@ class _ProfilePageState extends State<ProfilePage> {
                             },
                           );
                         } else {
-                          //TODO: Update the user
+                          currentUser.email = _emailController.text;
+                          currentUser.username = _usernameController.text;
+                          currentUser.password = _passwordController.text;
                         }
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width - 250,
                         height: 50,
                         decoration: const BoxDecoration(
-                          // gradient: LinearGradient(
-                          //     colors: [Colors.deepOrange, Colors.yellow]),
                           color: Colors.orange,
                           borderRadius: BorderRadius.all(Radius.circular(22)),
                         ),
