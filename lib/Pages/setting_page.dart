@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reddit_clone_ui/Pages/about_us.dart';
 import '../data.dart';
 import '/Pages/profile_page.dart';
 import '/Pages/savedposts_page.dart';
@@ -83,7 +84,7 @@ class SettingPage extends StatelessWidget {
                 ),
                 leading: Icon(Icons.info_outline),
                 onTap: () {
-                  //TODO: About Us
+                  onNext(AboutUs());
                 },
               ),
               //TODO: DarkMode
