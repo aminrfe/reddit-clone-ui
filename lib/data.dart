@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:reddit_clone_ui/Models/comment_model.dart';
+
 import 'Models/forum_model.dart';
 
 import 'Models/post_model.dart';
@@ -129,7 +131,6 @@ class Data {
     userPosts[4].forum = f4;
     userPosts[5].forum = f4;
 
-
     userSavedPosts.forEach((element) {
       element.user = currentUser;
     });
@@ -145,6 +146,32 @@ class Data {
     f2.admin = currentUser;
     f3.admin = currentUser;
     f4.admin = currentUser;
+
+    List<CommentModel> comments = [
+      CommentModel(
+          currentUser,
+          "1This is a test for reddit ui.\nIt is second line of text.",
+          DateTime.now(), [], []),
+      CommentModel(
+          currentUser,
+          "2This is a test for reddit ui.\nIt is second line of text.",
+          DateTime.now(), [], []),
+      CommentModel(
+          currentUser,
+          "3This is a test for reddit ui.\nIt is second line of text.",
+          DateTime.now(), [], []),
+    ];
+
+    userSavedPosts.forEach((element) {
+      element.comments = comments;
+    });
+
+    userSavedPosts.forEach( (element) {
+  
+      element.comments[0].replies = comments;
+    }
+
+    );
   }
 
   static final Data _instance = Data._();

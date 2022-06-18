@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:reddit_clone_ui/Pages/post_detail.dart';
+import '/Pages/post_detail.dart';
 import '../data.dart';
 import '/Models/post_model.dart';
 import '/Models/user_model.dart';
@@ -61,17 +61,15 @@ class PostItem extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Row(
-                      children: [
-                        Flexible( 
-                          child: Text(post.title,
-                              style: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold)),
-                        ),
-                      ],
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Flexible( 
+                        child: Text(post.title,
+                            style: const TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold)),
+                      ),
+                    ],
                   ),
                 ),
                 Row(
