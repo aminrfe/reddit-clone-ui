@@ -15,7 +15,7 @@ class Data {
 
   List<PostModel> userPosts;
   List<PostModel> userSavedPosts;
-  
+
   Data._() {
     userPosts = [
       PostModel(
@@ -119,13 +119,27 @@ class Data {
     currentUser.favoriteForums = [f1, f3];
 
     userPosts.forEach((element) {
-      element.forum = f1;
       element.user = currentUser;
     });
+
+    userPosts[0].forum = f2;
+    userPosts[1].forum = f2;
+    userPosts[2].forum = f3;
+    userPosts[3].forum = f3;
+    userPosts[4].forum = f4;
+    userPosts[5].forum = f4;
+
+
     userSavedPosts.forEach((element) {
-      element.forum = f2;
       element.user = currentUser;
     });
+
+    userSavedPosts[0].forum = f1;
+    userSavedPosts[1].forum = f1;
+    userSavedPosts[2].forum = f1;
+
+    userSavedPosts[3].forum = f3;
+    userSavedPosts[4].forum = f3;
 
     f1.admin = currentUser;
     f2.admin = currentUser;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:reddit_clone_ui/Pages/post_detail.dart';
 import '/Models/post_model.dart';
 import '/Models/user_model.dart';
 import '/Models/forum_model.dart';
@@ -85,7 +86,7 @@ class ForumItem extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 20),
-                    child: Text(post.desc,
+                    child: Text(post.title,
                         style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold)),
                   ),
@@ -143,7 +144,9 @@ class ForumItem extends StatelessWidget {
           ),
         ),
         onTap: () {
-          //TODO: Navigate to post details page
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return PostDetail(currentPost: post);
+          }));
         },
       ),
     );

@@ -4,6 +4,7 @@ import 'package:reddit_clone_ui/Models/post_model.dart';
 import '../data.dart';
 import '/Models/user_model.dart';
 import '/Models/forum_model.dart';
+import '/Pages/feed_page.dart';
 
 class AddPost extends StatefulWidget {
   AddPost({Key key}) : super(key: key);
@@ -20,6 +21,11 @@ class _AddPostState extends State<AddPost> {
 
   TextEditingController titleController;
   TextEditingController descController;
+
+  void addPost(PostModel post) {
+    widget.currentUser.posts.add(post);
+    currentForum.posts.add(post);
+  }
 
   @override
   void initState() {
@@ -85,8 +91,8 @@ class _AddPostState extends State<AddPost> {
                                     <UserModel>[],
                                     <UserModel>[],
                                     <CommentModel>[]);
-                                currentForum.posts.add(post);
-                                widget.currentUser.posts.add(post);
+
+                                addPost(post);
 
                                 titleController.clear();
                                 descController.clear();
@@ -125,7 +131,8 @@ class _AddPostState extends State<AddPost> {
                         width: 10,
                       ),
                       PopupMenuButton<ForumModel>(
-                        itemBuilder: (context) => (widget.currentUser.followedForums !=
+                        itemBuilder: (context) => (widget
+                                    .currentUser.followedForums !=
                                 null)
                             ? widget.currentUser.followedForums
                                 .map((forum) => PopupMenuItem<ForumModel>(

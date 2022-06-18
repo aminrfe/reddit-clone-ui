@@ -292,6 +292,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           currentUser.email = _emailController.text;
                           currentUser.username = _usernameController.text;
                           currentUser.password = _passwordController.text;
+                          Navigator.pop(context);
                         }
                       },
                       child: Container(
