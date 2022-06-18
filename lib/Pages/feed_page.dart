@@ -3,21 +3,21 @@ import '../data.dart';
 import '/Models/forum_model.dart';
 import '/Models/post_model.dart';
 import '/Models/user_model.dart';
-import '/Items/post_item.dart';
+import '/Items/post_item_feed.dart';
 
 class FeedPage extends StatefulWidget {
-  const FeedPage({Key key}) : super(key: key);
+  FeedPage({Key key}) : super(key: key);
+  final UserModel currentUser = Data().currentUser;
 
   @override
   State<FeedPage> createState() => _FeedPageState();
 }
 
 class _FeedPageState extends State<FeedPage> {
-  final UserModel currentUser = Data().currentUser;
   List<PostModel> posts;
 
   void initState() {
-    posts = currentUser.followedForums
+    posts = widget.currentUser.followedForums
         .map((e) => e.posts)
         .expand((e) => e)
         .toList();
@@ -26,33 +26,33 @@ class _FeedPageState extends State<FeedPage> {
 
   void changeUpVotes(int index) {
     setState(() {
-      if (posts[index].upvotes.contains(currentUser)) {
-        posts[index].upvotes.remove(currentUser);
-      } else if (posts[index].downvotes.contains(currentUser)) {
-        posts[index].downvotes.remove(currentUser);
-        posts[index].upvotes.add(currentUser);
+      if (posts[index].upvotes.contains(widget.currentUser)) {
+        posts[index].upvotes.remove(widget.currentUser);
+      } else if (posts[index].downvotes.contains(widget.currentUser)) {
+        posts[index].downvotes.remove(widget.currentUser);
+        posts[index].upvotes.add(widget.currentUser);
       } else {
-        posts[index].upvotes.add(currentUser);
+        posts[index].upvotes.add(widget.currentUser);
       }
     });
   }
 
   void changeDownVotes(int index) {
     setState(() {
-      if (posts[index].downvotes.contains(currentUser)) {
-        posts[index].downvotes.remove(currentUser);
-      } else if (posts[index].upvotes.contains(currentUser)) {
-        posts[index].upvotes.remove(currentUser);
-        posts[index].downvotes.add(currentUser);
+      if (posts[index].downvotes.contains(widget.currentUser)) {
+        posts[index].downvotes.remove(widget.currentUser);
+      } else if (posts[index].upvotes.contains(widget.currentUser)) {
+        posts[index].upvotes.remove(widget.currentUser);
+        posts[index].downvotes.add(widget.currentUser);
       } else {
-        posts[index].downvotes.add(currentUser);
+        posts[index].downvotes.add(widget.currentUser);
       }
     });
   }
 
   void savePost(int index) {
     setState(() {
-      currentUser.addSavedPost(posts[index]);
+      widget.currentUser.addSavedPost(posts[index]);
     });
   }
 
@@ -86,8 +86,11 @@ class _FeedPageState extends State<FeedPage> {
       body: ListView.builder(
         itemCount: posts.length,
         itemBuilder: (context, index) {
-          return PostItem(posts[index], currentUser, () => changeUpVotes(index),
-              () => changeDownVotes(index), () => savePost(index));
+          return PostItem(
+              posts[index],
+              () => changeUpVotes(index),
+              () => changeDownVotes(index),
+              () => savePost(index));
         },
       ),
     );

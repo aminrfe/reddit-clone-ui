@@ -6,29 +6,29 @@ import '/Models/user_model.dart';
 import 'forum_page.dart';
 
 class ForumsList extends StatefulWidget {
-  const ForumsList({Key key}) : super(key: key);
+  ForumsList({Key key}) : super(key: key);
+  final UserModel currentUser = Data().currentUser;
 
   @override
   State<ForumsList> createState() => _ForumsListState();
 }
 
 class _ForumsListState extends State<ForumsList> {
-  UserModel currentUser = Data().currentUser;
   List<ForumModel> unfavoritedForums;
   List<Map<String, dynamic>> _items;
 
   @override
   void initState() {
-    unfavoritedForums = currentUser.followedForums
+    unfavoritedForums = widget.currentUser.followedForums
         .toSet()
-        .difference(currentUser.favoriteForums.toSet())
+        .difference(widget.currentUser.favoriteForums.toSet())
         .toList();
 
     _items = [
       {
         'icon': Icons.star_rounded,
         'title': "Favorites",
-        'list': currentUser.favoriteForums,
+        'list': widget.currentUser.favoriteForums,
         'isExpanded': true
       },
       {
@@ -43,13 +43,13 @@ class _ForumsListState extends State<ForumsList> {
   }
 
   bool isfavorite(ForumModel forum) {
-    return currentUser.favoriteForums.contains(forum);
+    return widget.currentUser.favoriteForums.contains(forum);
   }
 
   void toggleFavorite(ForumModel forum) {
-    if (currentUser.favoriteForums.contains(forum)) {
+    if (widget.currentUser.favoriteForums.contains(forum)) {
       setState(() {
-        currentUser.favoriteForums.remove(forum);
+        widget.currentUser.favoriteForums.remove(forum);
         unfavoritedForums.add(forum);
       });
 
@@ -57,10 +57,11 @@ class _ForumsListState extends State<ForumsList> {
     } else {
       setState(() {
         unfavoritedForums.remove(forum);
-        currentUser.favoriteForums.add(forum);
+        widget.currentUser.favoriteForums.add(forum);
       });
 
-      currentUser.favoriteForums.sort((a, b) => a.name.compareTo(b.name));
+      widget.currentUser.favoriteForums
+          .sort((a, b) => a.name.compareTo(b.name));
     }
   }
 
@@ -89,8 +90,8 @@ class _ForumsListState extends State<ForumsList> {
                 onPressed: () async {
                   final finalResult = await showSearch(
                       context: context,
-                      delegate:
-                          SearchForums(allForums: currentUser.followedForums));
+                      delegate: SearchForums(
+                          allForums: widget.currentUser.followedForums));
                   if (finalResult != null) {
                     Navigator.push(
                       context,

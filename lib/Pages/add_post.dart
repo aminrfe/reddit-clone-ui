@@ -6,7 +6,8 @@ import '/Models/user_model.dart';
 import '/Models/forum_model.dart';
 
 class AddPost extends StatefulWidget {
-  const AddPost({Key key}) : super(key: key);
+  AddPost({Key key}) : super(key: key);
+  final UserModel currentUser = Data().currentUser;
 
   @override
   State<AddPost> createState() => _AddPostState();
@@ -14,7 +15,6 @@ class AddPost extends StatefulWidget {
 
 class _AddPostState extends State<AddPost> {
   bool isNextActive = false;
-  UserModel currentUser = Data().currentUser;
   List<ForumModel> forums;
   ForumModel currentForum;
 
@@ -23,12 +23,12 @@ class _AddPostState extends State<AddPost> {
 
   @override
   void initState() {
-    List<ForumModel> forums = Data().currentUser.followedForums;
+    List<ForumModel> forums = widget.currentUser.followedForums;
 
     titleController = TextEditingController();
     descController = TextEditingController();
-    currentForum = (currentUser.followedForums != null)
-        ? currentUser.followedForums[0]
+    currentForum = (widget.currentUser.followedForums != null)
+        ? widget.currentUser.followedForums[0]
         : null;
 
     titleController.addListener(() {
@@ -80,13 +80,13 @@ class _AddPostState extends State<AddPost> {
                                     titleController.text,
                                     descController.text,
                                     currentForum,
-                                    currentUser,
+                                    widget.currentUser,
                                     DateTime.now(),
                                     <UserModel>[],
                                     <UserModel>[],
                                     <CommentModel>[]);
                                 currentForum.posts.add(post);
-                                currentUser.posts.add(post);
+                                widget.currentUser.posts.add(post);
 
                                 titleController.clear();
                                 descController.clear();
@@ -125,9 +125,9 @@ class _AddPostState extends State<AddPost> {
                         width: 10,
                       ),
                       PopupMenuButton<ForumModel>(
-                        itemBuilder: (context) => (currentUser.followedForums !=
+                        itemBuilder: (context) => (widget.currentUser.followedForums !=
                                 null)
-                            ? currentUser.followedForums
+                            ? widget.currentUser.followedForums
                                 .map((forum) => PopupMenuItem<ForumModel>(
                                       value: forum,
                                       child: ListTile(

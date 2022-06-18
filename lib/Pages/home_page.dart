@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import '/Models/user_model.dart';
-import '/Pages/add_post.dart';
+import 'add_post.dart';
 import 'feed_page.dart';
 import 'forums_list.dart';
 import 'setting_page.dart';
@@ -13,7 +12,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  UserModel currentUser;
   String _currentPage = 'FeedPage';
   int _selectedIndex = 0;
 

@@ -15,8 +15,8 @@ class Data {
 
   List<PostModel> userPosts;
   List<PostModel> userSavedPosts;
-
-  Data() {
+  
+  Data._() {
     userPosts = [
       PostModel(
           "title1",
@@ -58,31 +58,31 @@ class Data {
 
     userSavedPosts = [
       PostModel(
-          "title1",
+          "stitle1",
           'This is a test for reddit ui.\nIt is second line of text.',
           null,
           null,
           DateTime.now(), [], [], []),
       PostModel(
-          "title1",
+          "stitle1",
           'This is a test for reddit ui.\nIt is second line of text.',
           null,
           null,
           DateTime.now(), [], [], []),
       PostModel(
-          "title1",
+          "stitle1",
           'This is a test for reddit ui.\nIt is second line of text.',
           null,
           null,
           DateTime.now(), [], [], []),
       PostModel(
-          "title1",
+          "stitle1",
           'This is a test for reddit ui.\nIt is second line of text.',
           null,
           null,
           DateTime.now(), [], [], []),
       PostModel(
-          "title1",
+          "stitle1",
           'This is a test for reddit ui.\nIt is second line of text.',
           null,
           null,
@@ -131,5 +131,11 @@ class Data {
     f2.admin = currentUser;
     f3.admin = currentUser;
     f4.admin = currentUser;
+  }
+
+  static final Data _instance = Data._();
+
+  factory Data() {
+    return _instance;
   }
 }

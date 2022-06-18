@@ -1,46 +1,51 @@
 import 'package:flutter/material.dart';
 import '/Models/user_model.dart';
-import '/Items/post_item.dart';
+import '/Items/post_item_feed.dart';
 import '../data.dart';
 
 class SavedPostsPage extends StatefulWidget {
+  final UserModel currentUser = Data().currentUser;
+
   @override
   State<SavedPostsPage> createState() => _SavedPostsPageState();
 }
 
 class _SavedPostsPageState extends State<SavedPostsPage> {
-  final UserModel currentUser = Data().currentUser;
-
   void changeUpVotes(int index) {
     setState(() {
-      if (currentUser.savedPosts[index].upvotes.contains(currentUser)) {
-        currentUser.savedPosts[index].upvotes.remove(currentUser);
-      } else if (currentUser.savedPosts[index].downvotes
-          .contains(currentUser)) {
-        currentUser.savedPosts[index].downvotes.remove(currentUser);
-        currentUser.savedPosts[index].upvotes.add(currentUser);
+      if (widget.currentUser.savedPosts[index].upvotes
+          .contains(widget.currentUser)) {
+        widget.currentUser.savedPosts[index].upvotes.remove(widget.currentUser);
+      } else if (widget.currentUser.savedPosts[index].downvotes
+          .contains(widget.currentUser)) {
+        widget.currentUser.savedPosts[index].downvotes
+            .remove(widget.currentUser);
+        widget.currentUser.savedPosts[index].upvotes.add(widget.currentUser);
       } else {
-        currentUser.savedPosts[index].upvotes.add(currentUser);
+        widget.currentUser.savedPosts[index].upvotes.add(widget.currentUser);
       }
     });
   }
 
   void changeDownVotes(int index) {
     setState(() {
-      if (currentUser.savedPosts[index].downvotes.contains(currentUser)) {
-        currentUser.savedPosts[index].downvotes.remove(currentUser);
-      } else if (currentUser.savedPosts[index].upvotes.contains(currentUser)) {
-        currentUser.savedPosts[index].upvotes.remove(currentUser);
-        currentUser.savedPosts[index].downvotes.add(currentUser);
+      if (widget.currentUser.savedPosts[index].downvotes
+          .contains(widget.currentUser)) {
+        widget.currentUser.savedPosts[index].downvotes
+            .remove(widget.currentUser);
+      } else if (widget.currentUser.savedPosts[index].upvotes
+          .contains(widget.currentUser)) {
+        widget.currentUser.savedPosts[index].upvotes.remove(widget.currentUser);
+        widget.currentUser.savedPosts[index].downvotes.add(widget.currentUser);
       } else {
-        currentUser.savedPosts[index].downvotes.add(currentUser);
+        widget.currentUser.savedPosts[index].downvotes.add(widget.currentUser);
       }
     });
   }
 
   void savePost(int index) {
     setState(() {
-      currentUser.addSavedPost(currentUser.savedPosts[index]);
+      widget.currentUser.addSavedPost(widget.currentUser.savedPosts[index]);
     });
   }
 
@@ -64,11 +69,10 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
         ),
       ),
       body: ListView.builder(
-        itemCount: currentUser.savedPosts.length,
+        itemCount: widget.currentUser.savedPosts.length,
         itemBuilder: (context, index) {
           return PostItem(
-              currentUser.savedPosts[index],
-              currentUser,
+              widget.currentUser.savedPosts[index],
               () => changeUpVotes(index),
               () => changeDownVotes(index),
               () => savePost(index));
