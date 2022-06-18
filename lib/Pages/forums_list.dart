@@ -42,6 +42,20 @@ class _ForumsListState extends State<ForumsList> {
     super.initState();
   }
 
+  void removeForum(ForumModel forum, bool removed) {
+    if (removed) {
+      if (unfavoritedForums.contains(forum)) {
+        unfavoritedForums.remove(forum);
+      } else {
+        widget.currentUser.favoriteForums.remove(forum);
+      }
+    }
+    else {
+      unfavoritedForums.add(forum);
+    }
+    setState(() {});
+  }
+
   bool isfavorite(ForumModel forum) {
     return widget.currentUser.favoriteForums.contains(forum);
   }
@@ -171,6 +185,7 @@ class _ForumsListState extends State<ForumsList> {
                                     MaterialPageRoute(
                                         builder: (context) => ForumPage(
                                               currentForum: item['list'][index],
+                                              removeForum: removeForum,
                                             )));
                               },
                             );

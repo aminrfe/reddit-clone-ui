@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:reddit_clone_ui/Pages/page_detail.dart';
+import 'package:reddit_clone_ui/Pages/post_detail.dart';
+import '../data.dart';
 import '/Models/post_model.dart';
 import '/Models/user_model.dart';
 
 class PostItem extends StatelessWidget {
-  PostItem(this.post, this.currentUser, this.changeUpVotes,
-      this.changeDownVotes, this.savePost);
+  PostItem(this.post, this.changeUpVotes, this.changeDownVotes, this.savePost, this.refresh);
 
+  final UserModel currentUser = Data().currentUser;
   final PostModel post;
-  final UserModel currentUser;
   final Function changeUpVotes;
   final Function changeDownVotes;
   final Function savePost;
+  final Function refresh;
 
   @override
   Widget build(BuildContext context) {
@@ -120,8 +121,7 @@ class PostItem extends StatelessWidget {
         onTap: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return PostDetail(currentPost: post);
-          }));
-          //ToDo: Navigate to post deatails page
+          })).then(refresh);
         },
       ),
     );

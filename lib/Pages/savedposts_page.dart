@@ -51,6 +51,7 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
 
   @override
   Widget build(BuildContext context) {
+    (_) => setState(() {});
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(52.0),
@@ -68,15 +69,24 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
           ),
         ),
       ),
-      body: ListView.builder(
-        itemCount: widget.currentUser.savedPosts.length,
-        itemBuilder: (context, index) {
-          return PostItem(
-              widget.currentUser.savedPosts[index],
-              () => changeUpVotes(index),
-              () => changeDownVotes(index),
-              () => savePost(index));
+      body: RefreshIndicator(
+        color: Colors.deepOrange,
+        triggerMode: RefreshIndicatorTriggerMode.onEdge,
+        onRefresh: () async {
+          await Future.delayed(const Duration(seconds: 1));
+          setState(() {});
         },
+        child: ListView.builder(
+          itemCount: widget.currentUser.savedPosts.length,
+          itemBuilder: (context, index) {
+            return PostItem(
+                widget.currentUser.savedPosts[index],
+                () => changeUpVotes(index),
+                () => changeDownVotes(index),
+                () => savePost(index),
+                (_) => setState(() {}));
+          },
+        ),
       ),
     );
   }

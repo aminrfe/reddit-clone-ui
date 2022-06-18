@@ -16,12 +16,22 @@ class FeedPage extends StatefulWidget {
 class _FeedPageState extends State<FeedPage> {
   List<PostModel> posts;
 
+  @override
   void initState() {
     posts = widget.currentUser.followedForums
         .map((e) => e.posts)
         .expand((e) => e)
         .toList();
     super.initState();
+  }
+
+  void refresh() {
+    setState(() {
+      posts = widget.currentUser.followedForums
+          .map((e) => e.posts)
+          .expand((e) => e)
+          .toList();
+    });
   }
 
   void changeUpVotes(int index) {
@@ -58,6 +68,7 @@ class _FeedPageState extends State<FeedPage> {
 
   @override
   Widget build(BuildContext context) {
+    refresh();
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(52),
@@ -83,15 +94,24 @@ class _FeedPageState extends State<FeedPage> {
           ],
         ),
       ),
-      body: ListView.builder(
-        itemCount: posts.length,
-        itemBuilder: (context, index) {
-          return PostItem(
-              posts[index],
-              () => changeUpVotes(index),
-              () => changeDownVotes(index),
-              () => savePost(index));
+      body: RefreshIndicator(
+        color: Colors.deepOrange,
+        triggerMode: RefreshIndicatorTriggerMode.onEdge,
+        onRefresh: () async {
+          await Future.delayed(const Duration(seconds: 1));
+          refresh();
         },
+        child: ListView.builder(
+          itemCount: posts.length,
+          itemBuilder: (context, index) {
+            return PostItem(
+                posts[index],
+                () => changeUpVotes(index),
+                () => changeDownVotes(index),
+                () => savePost(index),
+                (_) => setState(() {}));
+          },
+        ),
       ),
     );
   }
