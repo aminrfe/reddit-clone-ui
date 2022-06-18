@@ -6,7 +6,8 @@ import '/Models/post_model.dart';
 import '/Models/user_model.dart';
 
 class PostItem extends StatelessWidget {
-  PostItem(this.post, this.changeUpVotes, this.changeDownVotes, this.savePost, this.refresh);
+  PostItem(this.post, this.changeUpVotes, this.changeDownVotes, this.savePost,
+      this.refresh);
 
   final UserModel currentUser = Data().currentUser;
   final PostModel post;
@@ -48,25 +49,30 @@ class PostItem extends StatelessWidget {
                   title: Text(
                     'r/' + post.forum.name,
                     style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
+                        fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(
                     'u/' +
                         post.user.username +
                         ' . ' +
                         DateFormat('yyyy-MM-dd – kk:mm').format(post.date),
-                    style: const TextStyle(fontSize: 15, color: Colors.black45),
+                    style: const TextStyle(fontSize: 14, color: Colors.black45),
                   ),
                 ),
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20),
-                      child: Text(post.title,
-                          style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      children: [
+                        Flexible( 
+                          child: Text(post.title,
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold)),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -74,6 +80,8 @@ class PostItem extends StatelessWidget {
                     Row(
                       children: [
                         IconButton(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
                           icon: post.upvotes.contains(currentUser)
                               ? const Icon(Icons.arrow_upward,
                                   color: Colors.deepOrange)
@@ -86,6 +94,8 @@ class PostItem extends StatelessWidget {
                         Text((post.upvotes.length - post.downvotes.length)
                             .toString()),
                         IconButton(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
                           icon: post.downvotes.contains(currentUser)
                               ? const Icon(Icons.arrow_downward,
                                   color: Colors.purple)
@@ -100,6 +110,8 @@ class PostItem extends StatelessWidget {
                     Row(
                       children: [
                         IconButton(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
                           icon: const Icon(Icons.mode_comment_outlined),
                           onPressed: () {},
                         ),
@@ -107,6 +119,8 @@ class PostItem extends StatelessWidget {
                       ],
                     ),
                     IconButton(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
                       icon: currentUser.savedPosts.contains(post)
                           ? const Icon(Icons.bookmark)
                           : const Icon(Icons.bookmark_border),
