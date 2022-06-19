@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+
 import '../data.dart';
-import '/Models/forum_model.dart';
 import '/Models/post_model.dart';
 import '/Models/user_model.dart';
+import 'post_detail.dart';
 import '/Items/post_item_feed.dart';
+import 'search_posts.dart';
 
 class FeedPage extends StatefulWidget {
   FeedPage({Key key}) : super(key: key);
@@ -22,6 +24,7 @@ class _FeedPageState extends State<FeedPage> {
         .map((e) => e.posts)
         .expand((e) => e)
         .toList();
+    posts.sort((a, b) => b.date.compareTo(a.date));
     super.initState();
   }
 
@@ -31,38 +34,39 @@ class _FeedPageState extends State<FeedPage> {
           .map((e) => e.posts)
           .expand((e) => e)
           .toList();
+      posts.sort((a, b) => b.date.compareTo(a.date));
     });
   }
 
-  void changeUpVotes(int index) {
+  void changeUpVotes(PostModel post) {
     setState(() {
-      if (posts[index].upvotes.contains(widget.currentUser)) {
-        posts[index].upvotes.remove(widget.currentUser);
-      } else if (posts[index].downvotes.contains(widget.currentUser)) {
-        posts[index].downvotes.remove(widget.currentUser);
-        posts[index].upvotes.add(widget.currentUser);
+      if (post.upvotes.contains(widget.currentUser)) {
+        post.upvotes.remove(widget.currentUser);
+      } else if (post.downvotes.contains(widget.currentUser)) {
+        post.downvotes.remove(widget.currentUser);
+        post.upvotes.add(widget.currentUser);
       } else {
-        posts[index].upvotes.add(widget.currentUser);
+        post.upvotes.add(widget.currentUser);
       }
     });
   }
 
-  void changeDownVotes(int index) {
+  void changeDownVotes(PostModel post) {
     setState(() {
-      if (posts[index].downvotes.contains(widget.currentUser)) {
-        posts[index].downvotes.remove(widget.currentUser);
-      } else if (posts[index].upvotes.contains(widget.currentUser)) {
-        posts[index].upvotes.remove(widget.currentUser);
-        posts[index].downvotes.add(widget.currentUser);
+      if (post.downvotes.contains(widget.currentUser)) {
+        post.downvotes.remove(widget.currentUser);
+      } else if (post.upvotes.contains(widget.currentUser)) {
+        post.upvotes.remove(widget.currentUser);
+        post.downvotes.add(widget.currentUser);
       } else {
-        posts[index].downvotes.add(widget.currentUser);
+        post.downvotes.add(widget.currentUser);
       }
     });
   }
 
-  void savePost(int index) {
+  void savePost(PostModel post) {
     setState(() {
-      widget.currentUser.addSavedPost(posts[index]);
+      widget.currentUser.addSavedPost(post);
     });
   }
 
@@ -89,7 +93,18 @@ class _FeedPageState extends State<FeedPage> {
           actions: [
             IconButton(
               icon: Icon(Icons.search),
-              onPressed: () {},
+              onPressed: () async {
+                final finalResult = await showSearch(
+                    context: context, delegate: SearchPosts(allPosts: posts));
+                if (finalResult != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            PostDetail(currentPost: finalResult)),
+                  ).then((_) => setState(() {}));
+                }
+              },
             ),
           ],
         ),
@@ -106,9 +121,9 @@ class _FeedPageState extends State<FeedPage> {
           itemBuilder: (context, index) {
             return PostItem(
                 posts[index],
-                () => changeUpVotes(index),
-                () => changeDownVotes(index),
-                () => savePost(index),
+                () => changeUpVotes(posts[index]),
+                () => changeDownVotes(posts[index]),
+                () => savePost(posts[index]),
                 (_) => setState(() {}));
           },
         ),
