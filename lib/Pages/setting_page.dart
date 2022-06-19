@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:reddit_clone_ui/Pages/about_us.dart';
+
+import '/Pages/about_us.dart';
+import '/Pages/create_forum.dart';
 import '../data.dart';
 import '/Pages/profile_page.dart';
 import '/Pages/savedposts_page.dart';
@@ -58,7 +60,7 @@ class SettingPage extends StatelessWidget {
                 ),
                 leading: Icon(Icons.forum_rounded),
                 onTap: () {
-                  //TODO: Create Forum
+                  onNext(CreateForum());
                 },
               ),
               ListTile(
