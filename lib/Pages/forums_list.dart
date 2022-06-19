@@ -49,8 +49,7 @@ class _ForumsListState extends State<ForumsList> {
       } else {
         widget.currentUser.favoriteForums.remove(forum);
       }
-    }
-    else {
+    } else {
       unfavoritedForums.add(forum);
     }
     setState(() {});
@@ -79,8 +78,20 @@ class _ForumsListState extends State<ForumsList> {
     }
   }
 
+  void refresh() {
+    setState(() {
+      unfavoritedForums = widget.currentUser.followedForums
+          .toSet()
+          .difference(widget.currentUser.favoriteForums.toSet())
+          .toList();
+
+      _items[1]['list'] = unfavoritedForums;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    refresh();
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(52),

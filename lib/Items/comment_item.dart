@@ -35,8 +35,8 @@ class _CommentItemState extends State<CommentItem> {
             boxShadow: [
               BoxShadow(
                 color: Colors.grey[300],
-                blurRadius: 3.0,
-                spreadRadius: 0.0,
+                blurRadius: 2.0,
+                spreadRadius: 1.0,
                 offset: Offset(
                   0.0,
                   1.0,
@@ -74,25 +74,25 @@ class _CommentItemState extends State<CommentItem> {
             Row(mainAxisAlignment: MainAxisAlignment.end, children: [
               Row(
                 children: [
-                  Row(
-                    children: [
-                      IconButton(
-                        padding: EdgeInsets.zero,
-                        constraints: BoxConstraints(),
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        icon: Icon(Icons.reply_rounded, size: 20),
-                        onPressed: () {
-                          widget.addComment(comment.replies);
-                        },
-                      ),
-                      Text(
-                        "reply",
-                        style: TextStyle(fontSize: 13),
-                      )
-                    ],
-                  ),
-                  SizedBox(width: 10),
+                  // Row(
+                  //   children: [
+                  //     IconButton(
+                  //       padding: EdgeInsets.zero,
+                  //       constraints: BoxConstraints(),
+                  //       splashColor: Colors.transparent,
+                  //       highlightColor: Colors.transparent,
+                  //       icon: Icon(Icons.reply_rounded, size: 20),
+                  //       onPressed: () {
+                  //         widget.addComment(comment.replies);
+                  //       },
+                  //     ),
+                  //     Text(
+                  //       "reply",
+                  //       style: TextStyle(fontSize: 13),
+                  //     )
+                  //   ],
+                  // ),
+                  // SizedBox(width: 10),
                   IconButton(
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,

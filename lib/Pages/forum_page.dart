@@ -182,10 +182,17 @@ class _ForumPageState extends State<ForumPage> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                Text(
-                                  widget.currentForum.desc,
-                                  style: const TextStyle(
-                                      color: Colors.white, fontSize: 15),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        widget.currentForum.desc,
+                                        style: const TextStyle(
+                                            color: Colors.white, fontSize: 15),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),

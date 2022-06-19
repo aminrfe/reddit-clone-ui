@@ -49,48 +49,51 @@ class ForumItem extends StatelessWidget {
                       DateFormat('yyyy-MM-dd – kk:mm').format(post.date),
                   style: const TextStyle(fontSize: 15, color: Colors.black45),
                 ),
-                trailing: IconButton(
-                    icon: const Icon(Icons.more_vert),
-                    onPressed: () {
-                      if (currentUser.username == forum.admin.username) {
-                        showModalBottomSheet(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.08,
-                                child: Column(
-                                  children: [
-                                    ListTile(
-                                      title: const Text(
-                                        'Delete',
-                                        style: TextStyle(
-                                            color: Colors.red,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
+                trailing: (currentUser.username == forum.admin.username)
+                    ? IconButton(
+                        icon: const Icon(Icons.more_vert),
+                        onPressed: () {
+                          showModalBottomSheet(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.08,
+                                  child: Column(
+                                    children: [
+                                      ListTile(
+                                        title: const Text(
+                                          'Delete',
+                                          style: TextStyle(
+                                              color: Colors.red,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                          removePost();
+                                        },
                                       ),
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                        removePost();
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              );
-                            });
-                      }
-                    }),
+                                    ],
+                                  ),
+                                );
+                              });
+                        })
+                    : null,
                 contentPadding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
               ),
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: Text(post.title,
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
-                  ),
-                ],
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Flexible(
+                      child: Text(post.title,
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold)),
+                    ),
+                  ],
+                ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

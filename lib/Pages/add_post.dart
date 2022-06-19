@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:reddit_clone_ui/Models/comment_model.dart';
-import 'package:reddit_clone_ui/Models/post_model.dart';
+
+import '/Models/post_model.dart';
 import '../data.dart';
 import '/Models/user_model.dart';
 import '/Models/forum_model.dart';
-import '/Pages/feed_page.dart';
 
 class AddPost extends StatefulWidget {
   AddPost({Key key}) : super(key: key);
@@ -87,10 +86,7 @@ class _AddPostState extends State<AddPost> {
                                     descController.text,
                                     currentForum,
                                     widget.currentUser,
-                                    DateTime.now(),
-                                    <UserModel>[],
-                                    <UserModel>[],
-                                    <CommentModel>[]);
+                                    DateTime.now(), [], [], []);
 
                                 addPost(post);
 
