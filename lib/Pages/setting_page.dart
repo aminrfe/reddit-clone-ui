@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '/Pages/log_in.dart';
 
 import '/Pages/about_us.dart';
 import '/Pages/create_forum.dart';
@@ -89,7 +90,20 @@ class SettingPage extends StatelessWidget {
                   onNext(AboutUs());
                 },
               ),
-              //TODO: DarkMode
+              ListTile(
+                title: const Text(
+                  'LogOut',
+                  style: TextStyle(
+                      color: Colors.deepOrange,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
+                leading: Icon(Icons.logout_outlined),
+                onTap: () {
+                  //TODO Navigate to Login Page
+
+                },
+              ),
             ],
             padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
           ),
