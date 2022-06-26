@@ -9,8 +9,9 @@ import '/Pages/savedposts_page.dart';
 import '/Models/user_model.dart';
 
 class SettingPage extends StatelessWidget {
-  SettingPage({Key key, this.onNext}) : super(key: key);
+  SettingPage({Key key, this.onNext, this.onLogout}) : super(key: key);
   final Function onNext;
+  final Function onLogout;
 
   final UserModel currentUser = Data().currentUser;
 
@@ -100,8 +101,7 @@ class SettingPage extends StatelessWidget {
                 ),
                 leading: Icon(Icons.logout_outlined),
                 onTap: () {
-                  //TODO Navigate to Login Page
-
+                  onLogout();
                 },
               ),
             ],

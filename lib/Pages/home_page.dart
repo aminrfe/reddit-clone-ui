@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
       'FeedPage': FeedPage(),
       'ForumsList': ForumsList(),
       'AddPost': AddPost(),
-      'SettingPage': SettingPage(onNext: _next),
+      'SettingPage': SettingPage(onNext: _next, onLogout: _logout),
     }[tabItem];
   }
 
@@ -124,6 +124,11 @@ class _HomePageState extends State<HomePage> {
 
   void _next(Widget page) {
     Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+  }
+
+  void _logout() {
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil('/LogIn', (Route<dynamic> route) => false);
   }
 
   Widget _buildOffstageNavigator(String tabItem) {
