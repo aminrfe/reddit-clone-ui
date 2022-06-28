@@ -81,7 +81,6 @@ class _ProfilePageState extends State<ProfilePage> {
                         fontSize: 15,
                         color: Colors.black45,
                       ),
-                      // hintText: currentUser.email,
                       filled: true,
                       fillColor: Colors.grey[150],
                       focusedBorder: OutlineInputBorder(
@@ -119,7 +118,6 @@ class _ProfilePageState extends State<ProfilePage> {
                         fontSize: 15,
                         color: Colors.black45,
                       ),
-                      // hintText: currentUser.username,
                       filled: true,
                       fillColor: Colors.grey[150],
                       focusedBorder: OutlineInputBorder(
@@ -190,31 +188,27 @@ class _ProfilePageState extends State<ProfilePage> {
                   height: 350,
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     TextButton(
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: Container(
-                        width: MediaQuery.of(context).size.width - 250,
-                        height: 50,
-                        decoration: const BoxDecoration(
-                          color: Colors.orange,
-                          borderRadius: BorderRadius.all(Radius.circular(22)),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            "Cancel",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 26),
+                        backgroundColor: Colors.deepOrange,
+                        shape: const RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20))),
+                      ),
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                     ),
-                    SizedBox(
-                      width: 25,
+                    const SizedBox(
+                      width: 55,
                     ),
                     TextButton(
                       onPressed: () async {
@@ -295,22 +289,17 @@ class _ProfilePageState extends State<ProfilePage> {
                           Navigator.pop(context);
                         }
                       },
-                      child: Container(
-                        width: MediaQuery.of(context).size.width - 250,
-                        height: 50,
-                        decoration: const BoxDecoration(
-                          color: Colors.orange,
-                          borderRadius: BorderRadius.all(Radius.circular(22)),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            "Save",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12.2, horizontal: 36),
+                        backgroundColor: Colors.deepOrange,
+                        shape: const RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20))),
+                      ),
+                      child: const Text(
+                        'Save',
+                        style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                     ),
                   ],
