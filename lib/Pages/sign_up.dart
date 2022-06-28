@@ -16,9 +16,9 @@ class _SignUpState extends State<SignUp> {
   bool _isObscure = true;
   bool invalidEmail = false;
 
-
   bool isValidPass(String pass) {
-    if (RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$').hasMatch(pass)) {
+    if (RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$')
+        .hasMatch(pass)) {
       return true;
     }
     return false;
@@ -47,9 +47,9 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child: Column(
-            children: [
+        child: Column(children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -397,8 +397,7 @@ class _SignUpState extends State<SignUp> {
                         );
                       },
                     );
-                  }
-                  else if(!isValidPass(_passwordController.text)){
+                  } else if (!isValidPass(_passwordController.text)) {
                     showDialog(
                       context: context,
                       builder: (context) {
@@ -407,7 +406,9 @@ class _SignUpState extends State<SignUp> {
                               style: TextStyle(
                                   color: Colors.red,
                                   fontWeight: FontWeight.bold)),
-                          content: const Text("Password must contain at least one number, one lowercase and one uppercase letter",),
+                          content: const Text(
+                            "Password must contain at least one number, one lowercase and one uppercase letter",
+                          ),
                           actions: [
                             TextButton(
                               child: const Text("Ok"),
@@ -419,11 +420,8 @@ class _SignUpState extends State<SignUp> {
                         );
                       },
                     );
-                  }
-                  else {
-
-                  }
-                  },
+                  } else {}
+                },
                 child: Container(
                   width: MediaQuery.of(context).size.width - 50,
                   height: 50,
