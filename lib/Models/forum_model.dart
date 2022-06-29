@@ -3,44 +3,17 @@ import 'post_model.dart';
 import 'user_model.dart';
 
 class ForumModel {
-  String _name;
-  Image _avatar;
-  String _desc;
-  UserModel _admin;
-  List<PostModel> _posts;
+  String name;
+  Image avatar;
+  String desc;
+  UserModel admin;
+  List<PostModel> posts;
 
-  ForumModel(this._name, this._desc, this._admin, this._posts);
+  ForumModel({this.name, this.desc, this.admin, this.posts});
 
-  String get name => _name;
+  @override
+  operator ==(other) => other is ForumModel && other.name == name;
 
-  set name(String name) {
-    _name = name;
-  }
-
-  String get desc => _desc;
-
-  set desc(String desc) {
-    _desc = desc;
-  }
-
-  Image get avatar => _avatar;
-  set avatar(Image avatar) {
-    _avatar = avatar;
-  }
-
-  UserModel get admin => _admin;
-
-  set admin(UserModel admin) {
-    _admin = admin;
-  }
-
-  List<PostModel> get posts => _posts;
-
-  set posts(List<PostModel> posts) {
-    _posts = posts;
-  }
-
-  void addPost(PostModel post) {
-    _posts.add(post);
-  }
+  @override
+  int get hashCode => name.hashCode;
 }
