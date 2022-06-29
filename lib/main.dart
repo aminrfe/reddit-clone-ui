@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Reddit',
-      initialRoute: '/HomePage',
+      initialRoute: '/LogIn',
       routes: {
         '/SignUp': (context) => SignUp(),
         '/LogIn': (context) => LogIn(),
