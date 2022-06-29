@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
+import '../convertor.dart';
 import '../data.dart';
 import '/Models/user_model.dart';
 
@@ -286,6 +287,11 @@ class _ProfilePageState extends State<ProfilePage> {
                           currentUser.email = _emailController.text;
                           currentUser.username = _usernameController.text;
                           currentUser.password = _passwordController.text;
+                          await Data().request(
+                              'updateUserAccount',
+                              Convertor.mapToString(
+                                  Convertor.modelToMap(currentUser)));
+
                           Navigator.pop(context);
                         }
                       },

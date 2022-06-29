@@ -8,6 +8,7 @@ import '../Models/forum_model.dart';
 import '../Models/post_model.dart';
 import '../Models/user_model.dart';
 
+import '../convertor.dart';
 import '../data.dart';
 
 class PostDetail extends StatefulWidget {
@@ -35,7 +36,7 @@ class _PostDetailState extends State<PostDetail> {
     super.dispose();
   }
 
-  void changeUpVotes(PostModel post) {
+  void changeUpVotes(PostModel post) async {
     setState(() {
       if (post.upvotes.contains(widget.currentUser)) {
         post.upvotes.remove(widget.currentUser);
@@ -46,9 +47,15 @@ class _PostDetailState extends State<PostDetail> {
         post.upvotes.add(widget.currentUser);
       }
     });
+    String upvotes =
+        Convertor.listToString(post.upvotes.map((e) => e.username).toList());
+    String downvotes =
+        Convertor.listToString(post.downvotes.map((e) => e.username).toList());
+    await Data().request('updatePostVotes',
+        'id::${post.id}||upvotes::$upvotes||downvotes::$downvotes');
   }
 
-  void changeDownVotes(PostModel post) {
+  void changeDownVotes(PostModel post) async {
     setState(() {
       if (post.downvotes.contains(widget.currentUser)) {
         post.downvotes.remove(widget.currentUser);
@@ -59,15 +66,23 @@ class _PostDetailState extends State<PostDetail> {
         post.downvotes.add(widget.currentUser);
       }
     });
+    String upvotes =
+        Convertor.listToString(post.upvotes.map((e) => e.username).toList());
+    String downvotes =
+        Convertor.listToString(post.downvotes.map((e) => e.username).toList());
+    await Data().request('updatePostVotes',
+        'id::${post.id}||upvotes::$upvotes||downvotes::$downvotes');
   }
 
-  void savePost(PostModel post) {
+  void savePost(PostModel post) async {
     setState(() {
       widget.currentUser.addSavedPost(post);
     });
+    await Data().request('insertUserSavedPost',
+        'username::${widget.currentUser.username}||savedPosts::${post.id}');
   }
 
-  void changeUpVotesComment(CommentModel comment) {
+  void changeUpVotesComment(CommentModel comment) async {
     setState(() {
       if (comment.upvotes.contains(widget.currentUser)) {
         comment.upvotes.remove(widget.currentUser);
@@ -79,9 +94,16 @@ class _PostDetailState extends State<PostDetail> {
       }
       sortComments(widget.currentPost.comments, dropdownvalue);
     });
+
+    String upvotes =
+        Convertor.listToString(comment.upvotes.map((e) => e.username).toList());
+    String downvotes = Convertor.listToString(
+        comment.downvotes.map((e) => e.username).toList());
+    await Data().request('updateCommentVotes',
+        'id::${comment.id}||upvotes::$upvotes||downvotes::$downvotes');
   }
 
-  void changeDownVotesComment(CommentModel comment) {
+  void changeDownVotesComment(CommentModel comment) async {
     setState(() {
       if (comment.downvotes.contains(widget.currentUser)) {
         comment.downvotes.remove(widget.currentUser);
@@ -93,6 +115,13 @@ class _PostDetailState extends State<PostDetail> {
       }
       sortComments(widget.currentPost.comments, dropdownvalue);
     });
+
+    String upvotes =
+        Convertor.listToString(comment.upvotes.map((e) => e.username).toList());
+    String downvotes = Convertor.listToString(
+        comment.downvotes.map((e) => e.username).toList());
+    await Data().request('updateCommentVotes',
+        'id::${comment.id}||upvotes::$upvotes||downvotes::$downvotes');
   }
 
   void sortComments(List<CommentModel> comments, String sortBy) {
@@ -148,14 +177,26 @@ class _PostDetailState extends State<PostDetail> {
                           ? Icon(Icons.send, color: Colors.deepOrange, size: 25)
                           : Icon(Icons.send, color: Colors.grey, size: 25),
                       onPressed: value.text.isNotEmpty
-                          ? () {
+                          ? () async {
+                              String commentId = await Data().request(
+                                  'genCommentId',
+                                  'comment:${commentController.text}');
                               CommentModel comment = CommentModel(
-                                  widget.currentUser,
-                                  commentController.text,
-                                  DateTime.now(), [], []);
+                                  id: commentId,
+                                  user: widget.currentUser,
+                                  comment: commentController.text,
+                                  date: DateTime.now(),
+                                  upvotes: [],
+                                  downvotes: []);
                               setState(() {
                                 comments.add(comment);
                               });
+                              await Data().request('insertPostComment',
+                                  'id::${widget.currentPost.id}||comments::${comment.id}');
+                              await Data().request(
+                                  'insertComment',
+                                  Convertor.mapToString(
+                                      Convertor.modelToMap(comment)));
                               commentController.clear();
                               Navigator.pop(context);
                             }
@@ -172,35 +213,6 @@ class _PostDetailState extends State<PostDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     CommentModel newComment = CommentModel(widget.currentUser,
-      //         commentController.text, DateTime.now(), [], []);
-
-      //     setState(() {
-      //       widget.currentPost.comments.add(newComment);
-      //     });
-      //     commentController.clear();
-      //   },
-      //   child: Flexible(
-      //     // width: MediaQuery.of(context).size.width,
-      //     child: Row(
-      //       children: [
-      //         TextField(
-      //           controller: commentController,
-      //           maxLines: null,
-      //           keyboardType: TextInputType.multiline,
-      //           style: const TextStyle(fontSize: 18),
-      //           decoration: const InputDecoration(
-      //               // border: InputBorder.none,
-      //               hintText: "Add comment",
-      //               hintStyle: TextStyle(fontSize: 18)),
-      //         ),
-      //         Icon(Icons.send_rounded),
-      //       ],
-      //     ),
-      //   ),
-      // ),
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(52),
         child: AppBar(
@@ -226,7 +238,8 @@ class _PostDetailState extends State<PostDetail> {
                 () => savePost(widget.currentPost),
                 addComment),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 12),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 18.0, vertical: 12),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -237,8 +250,11 @@ class _PostDetailState extends State<PostDetail> {
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 8),
                     child: DropdownButton(
-                      underline: Container(),
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+                        underline: Container(),
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
                         value: dropdownvalue,
                         items: [
                           DropdownMenuItem(

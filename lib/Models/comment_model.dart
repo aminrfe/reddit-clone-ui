@@ -1,49 +1,24 @@
 import 'user_model.dart';
 
 class CommentModel {
-  UserModel _user;
-  String _comment;
-  DateTime _date;
-  List<UserModel> _upvotes;
-  List<UserModel> _downvotes;
-  List<CommentModel> _replies;
+  String id;
+  UserModel user;
+  String comment;
+  DateTime date;
+  List<UserModel> upvotes;
+  List<UserModel> downvotes;
 
   CommentModel(
-      this._user, this._comment, this._date, this._upvotes, this._downvotes);
+      {this.id,
+      this.user,
+      this.comment,
+      this.date,
+      this.upvotes,
+      this.downvotes});
 
-  UserModel get user => _user;
+  @override
+  operator ==(other) => other is CommentModel && other.id == id;
 
-  set user(UserModel user) {
-    _user = user;
-  }
-
-  String get comment => _comment;
-
-  set comment(String comment) {
-    _comment = comment;
-  }
-
-  DateTime get date => _date;
-
-  set date(DateTime date) {
-    _date = date;
-  }
-
-  List<UserModel> get upvotes => _upvotes;
-
-  set upvotes(List<UserModel> upvotes) {
-    _upvotes = upvotes;
-  }
-
-  List<UserModel> get downvotes => _downvotes;
-
-  set downvotes(List<UserModel> downvotes) {
-    _downvotes = downvotes;
-  }
-
-  List<CommentModel> get replies => _replies;
-
-  set replies(List<CommentModel> replies) {
-    _replies = replies;
-  }
+  @override
+  int get hashCode => id.hashCode;
 }
