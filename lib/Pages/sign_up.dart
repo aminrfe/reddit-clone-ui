@@ -3,7 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:email_validator/email_validator.dart';
-import '/Pages/log_in.dart';
+import '/data.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key key}) : super(key: key);
@@ -69,10 +69,8 @@ class _SignUpState extends State<SignUp> {
               ),
               TextButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const LogIn()),
-                    );
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        '/LogIn', (Route<dynamic> route) => false);
                   },
                   child: const Text(
                     'Log in',
@@ -420,7 +418,29 @@ class _SignUpState extends State<SignUp> {
                         );
                       },
                     );
-                  } else {}
+                  } else {
+                    String username = _usernameController.text;
+                    String password = _passwordController.text;
+                    String email = _emailController.text;
+
+                    await Data()
+                        .request('insertUser',
+                            'username::$username||password::$password||email::$email')
+                        .then((response) {
+                      if (response.contains('Done')) {
+                        Data().currentUser.username = username;
+                        Data().currentUser.password = password;
+                        Data().currentUser.email = email;
+
+                        _usernameController.clear();
+                        _passwordController.clear();
+                        _emailController.clear();
+
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            '/HomePage', (Route<dynamic> route) => false);
+                      }
+                    });
+                  }
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width - 50,

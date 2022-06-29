@@ -1,8 +1,9 @@
-// ignore_for_file: deprecated_member_use
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '/Pages/sign_up.dart';
+
+import '../convertor.dart';
+import '../data.dart';
 
 class LogIn extends StatefulWidget {
   const LogIn({Key key}) : super(key: key);
@@ -43,10 +44,9 @@ class _LogInState extends State<LogIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset : false,
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child: Column(
-            children: [
+        child: Column(children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -66,10 +66,8 @@ class _LogInState extends State<LogIn> {
               ),
               TextButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const SignUp()),
-                    );
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        '/SignUp', (Route<dynamic> route) => false);
                   },
                   child: const Text(
                     'Sign Up',
@@ -358,7 +356,57 @@ class _LogInState extends State<LogIn> {
                         );
                       },
                     );
-                  } else {}
+                  } else {
+                    String username = _usernameController.text;
+                    String password = _passwordController.text;
+                    await Data()
+                        .request('checkUser',
+                            'username::$username||password::$password')
+                        .then((response) async {
+                      if (response.contains('UserFound')) {
+                        Data().currentUser.username = username;
+                        Data().currentUser.password = password;
+                        await Data()
+                            .request('getUserAccount', 'username::$username')
+                            .then((response) {
+                          Data().currentUser.email =
+                              Convertor.stringToMap(response)['email'];
+                        });
+
+                        Data().downloadPosts();
+                        Data().downloadSavedPosts();
+                        Data().downloadFollowedForums();
+                        Data().downloadFavoriteForums();
+
+                        _usernameController.clear();
+                        _passwordController.clear();
+
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            '/HomePage', (Route<dynamic> route) => false);
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text("Error",
+                                  style: TextStyle(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold)),
+                              content: Text(response),
+                              actions: [
+                                TextButton(
+                                  child: const Text("Ok"),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    });
+                  }
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width - 50,
