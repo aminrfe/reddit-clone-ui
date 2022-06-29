@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reddit_clone_ui/Pages/search_forums.dart';
+import '../convertor.dart';
 import '../data.dart';
 import '/Models/forum_model.dart';
 import '/Models/user_model.dart';
@@ -59,7 +60,7 @@ class _ForumsListState extends State<ForumsList> {
     return widget.currentUser.favoriteForums.contains(forum);
   }
 
-  void toggleFavorite(ForumModel forum) {
+  void toggleFavorite(ForumModel forum) async {
     if (widget.currentUser.favoriteForums.contains(forum)) {
       setState(() {
         widget.currentUser.favoriteForums.remove(forum);
@@ -76,6 +77,12 @@ class _ForumsListState extends State<ForumsList> {
       widget.currentUser.favoriteForums
           .sort((a, b) => a.name.compareTo(b.name));
     }
+
+    String favorites =
+        Convertor.listToString(widget.currentUser.favoriteForums.map((e) {
+      return e.name;
+    }).toList());
+    await Data().request('updateUserForums', 'username::${widget.currentUser.username}||favoriteForums::$favorites');
   }
 
   void refresh() {

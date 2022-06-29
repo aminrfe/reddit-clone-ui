@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../convertor.dart';
 import '../data.dart';
 import '/Models/user_model.dart';
 import '/Models/forum_model.dart';
@@ -18,10 +19,13 @@ class _CreateForumState extends State<CreateForum> {
   TextEditingController nameController;
   TextEditingController descController;
 
-  void addForum(ForumModel forum) {
+  void addForum(ForumModel forum) async {
     widget.currentUser.followedForums.add(forum);
-     widget.currentUser.followedForums
-          .sort((a, b) => a.name.compareTo(b.name));
+    widget.currentUser.followedForums.sort((a, b) => a.name.compareTo(b.name));
+    await Data().request('insertUserForum',
+        'username::${widget.currentUser.username}||followedForums::${forum.name}');
+    await Data().request(
+        'insertForum', Convertor.mapToString(Convertor.modelToMap(forum)));
   }
 
   @override
@@ -74,9 +78,10 @@ class _CreateForumState extends State<CreateForum> {
                         onPressed: isDoneActive
                             ? () {
                                 ForumModel post = ForumModel(
-                                    nameController.text,
-                                    descController.text,
-                                    widget.currentUser, []);
+                                    name: nameController.text,
+                                    desc: descController.text,
+                                    admin: widget.currentUser,
+                                    posts: []);
 
                                 addForum(post);
 

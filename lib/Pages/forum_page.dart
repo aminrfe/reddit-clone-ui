@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../convertor.dart';
 import '../data.dart';
 import '/Models/forum_model.dart';
 import '/Models/user_model.dart';
@@ -16,7 +17,7 @@ class ForumPage extends StatefulWidget {
 }
 
 class _ForumPageState extends State<ForumPage> {
-  void changeUpVotes(int index) {
+  void changeUpVotes(int index) async {
     setState(() {
       if (widget.currentForum.posts[index].upvotes
           .contains(widget.currentUser)) {
@@ -29,9 +30,19 @@ class _ForumPageState extends State<ForumPage> {
         widget.currentForum.posts[index].upvotes.add(widget.currentUser);
       }
     });
+    String upvotes = Convertor.listToString(widget
+        .currentForum.posts[index].upvotes
+        .map((e) => e.username)
+        .toList());
+    String downvotes = Convertor.listToString(widget
+        .currentForum.posts[index].downvotes
+        .map((e) => e.username)
+        .toList());
+    await Data().request('updatePostVotes',
+        'id::${widget.currentForum.posts[index].id}||upvotes::$upvotes||downvotes::$downvotes');
   }
 
-  void changeDownVotes(int index) {
+  void changeDownVotes(int index) async {
     setState(() {
       if (widget.currentForum.posts[index].downvotes
           .contains(widget.currentUser)) {
@@ -44,30 +55,55 @@ class _ForumPageState extends State<ForumPage> {
         widget.currentForum.posts[index].downvotes.add(widget.currentUser);
       }
     });
+    String upvotes = Convertor.listToString(widget
+        .currentForum.posts[index].upvotes
+        .map((e) => e.username)
+        .toList());
+    String downvotes = Convertor.listToString(widget
+        .currentForum.posts[index].downvotes
+        .map((e) => e.username)
+        .toList());
+    await Data().request('updatePostVotes',
+        'id::${widget.currentForum.posts[index].id}||upvotes::$upvotes||downvotes::$downvotes');
   }
 
-  void removePost(int index) {
+  void removePost(int index) async {
     setState(() {
       widget.currentForum.posts.removeAt(index);
     });
+
+    await Data().request('deletePost',
+        'id::${widget.currentForum.posts[index].id}');
+    await Data().request('deleteUserPost',
+        'username::${widget.currentUser.username}||posts::${widget.currentForum.posts[index].id}');
+    await Data().request('deleteForumPost',
+        'forum::${widget.currentForum.name}||posts::${widget.currentForum.posts[index].id}');
   }
 
   void toggleJoin() {
-    setState(() {
+    setState(() async {
       if (widget.currentUser.followedForums.contains(widget.currentForum)) {
         widget.currentUser.followedForums.remove(widget.currentForum);
         widget.removeForum(widget.currentForum, true);
+
+        await Data().request('deleteUserForum',
+            'username::${widget.currentUser.username}||forums::${widget.currentForum.name}');
       } else {
         widget.currentUser.followedForums.add(widget.currentForum);
         widget.removeForum(widget.currentForum, false);
+
+        await Data().request('insertUserForum',
+            'username::${widget.currentUser.username}||forums::${widget.currentForum.name}');
       }
     });
   }
 
-  void savePost(int index) {
+  void savePost(int index) async {
     setState(() {
       widget.currentUser.addSavedPost(widget.currentForum.posts[index]);
     });
+    await Data().request('insertUserSavedPost',
+        'username::${widget.currentUser.username}||savedPosts::${widget.currentForum.posts[index].id}');
   }
 
   TextEditingController _forumNameController;

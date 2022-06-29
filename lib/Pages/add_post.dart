@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reddit_clone_ui/convertor.dart';
 
 import '/Models/post_model.dart';
 import '../data.dart';
@@ -21,18 +22,25 @@ class _AddPostState extends State<AddPost> {
   TextEditingController titleController;
   TextEditingController descController;
 
-  void addPost(PostModel post) {
+  void addPost(PostModel post) async {
     widget.currentUser.posts.add(post);
     currentForum.posts.add(post);
+    await Data().request(
+        "insertPost", Convertor.mapToString(Convertor.modelToMap(post)));
+    await Data().request("insertUserPost",
+        "username::${widget.currentUser.username}||posts::${post.id}");
+    await Data().request(
+        "insertForumPost", "forum::${currentForum.name}||posts::${post.id}");
   }
 
   @override
   void initState() {
-    List<ForumModel> forums = widget.currentUser.followedForums;
+    forums = widget.currentUser.followedForums;
 
     titleController = TextEditingController();
     descController = TextEditingController();
-    currentForum = (widget.currentUser.followedForums != null)
+    currentForum = (widget.currentUser.followedForums != null &&
+            widget.currentUser.followedForums.isNotEmpty)
         ? widget.currentUser.followedForums[0]
         : null;
 
@@ -80,19 +88,28 @@ class _AddPostState extends State<AddPost> {
                       padding: const EdgeInsets.only(top: 5, right: 15),
                       child: TextButton(
                         onPressed: isNextActive
-                            ? () {
-                                PostModel post = PostModel(
-                                    titleController.text,
-                                    descController.text,
-                                    currentForum,
-                                    widget.currentUser,
-                                    DateTime.now(), [], [], []);
+                            ? () async {
+                                await Data()
+                                    .request('genPostId',
+                                        'title::${titleController.text}')
+                                    .then((response) {
+                                  PostModel post = PostModel(
+                                      id: response,
+                                      title: titleController.text,
+                                      desc: descController.text,
+                                      forum: currentForum,
+                                      user: widget.currentUser,
+                                      date: DateTime.now(),
+                                      upvotes: [],
+                                      downvotes: [],
+                                      comments: []);
 
-                                addPost(post);
+                                  addPost(post);
 
-                                titleController.clear();
-                                descController.clear();
-                                Navigator.pop(context);
+                                  titleController.clear();
+                                  descController.clear();
+                                  Navigator.pop(context);
+                                });
                               }
                             : null,
                         style: TextButton.styleFrom(
@@ -129,7 +146,7 @@ class _AddPostState extends State<AddPost> {
                       PopupMenuButton<ForumModel>(
                         itemBuilder: (context) => (widget
                                     .currentUser.followedForums !=
-                                null)
+                                null && widget.currentUser.followedForums.isNotEmpty)
                             ? widget.currentUser.followedForums
                                 .map((forum) => PopupMenuItem<ForumModel>(
                                       value: forum,

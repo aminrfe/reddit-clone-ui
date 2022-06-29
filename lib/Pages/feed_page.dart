@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../convertor.dart';
 import '../data.dart';
 import '/Models/post_model.dart';
 import '/Models/user_model.dart';
@@ -38,7 +39,7 @@ class _FeedPageState extends State<FeedPage> {
     });
   }
 
-  void changeUpVotes(PostModel post) {
+  void changeUpVotes(PostModel post) async {
     setState(() {
       if (post.upvotes.contains(widget.currentUser)) {
         post.upvotes.remove(widget.currentUser);
@@ -49,9 +50,15 @@ class _FeedPageState extends State<FeedPage> {
         post.upvotes.add(widget.currentUser);
       }
     });
+    String upvotes =
+        Convertor.listToString(post.upvotes.map((e) => e.username).toList());
+    String downvotes =
+        Convertor.listToString(post.downvotes.map((e) => e.username).toList());
+    await Data().request('updatePostVotes',
+        'id::${post.id}||upvotes::$upvotes||downvotes::$downvotes');
   }
 
-  void changeDownVotes(PostModel post) {
+  void changeDownVotes(PostModel post) async {
     setState(() {
       if (post.downvotes.contains(widget.currentUser)) {
         post.downvotes.remove(widget.currentUser);
@@ -62,12 +69,20 @@ class _FeedPageState extends State<FeedPage> {
         post.downvotes.add(widget.currentUser);
       }
     });
+    String upvotes =
+        Convertor.listToString(post.upvotes.map((e) => e.username).toList());
+    String downvotes =
+        Convertor.listToString(post.downvotes.map((e) => e.username).toList());
+    await Data().request('updatePostVotes',
+        'id::${post.id}||upvotes::$upvotes||downvotes::$downvotes');
   }
 
-  void savePost(PostModel post) {
+  void savePost(PostModel post) async {
     setState(() {
       widget.currentUser.addSavedPost(post);
     });
+    await Data().request('insertUserSavedPost',
+        'username::${widget.currentUser.username}||savedPosts::${post.id}');
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../convertor.dart';
 import '/Models/user_model.dart';
 import '/Items/post_item_feed.dart';
 import '../data.dart';
@@ -11,7 +12,7 @@ class SavedPostsPage extends StatefulWidget {
 }
 
 class _SavedPostsPageState extends State<SavedPostsPage> {
-  void changeUpVotes(int index) {
+  void changeUpVotes(int index) async {
     setState(() {
       if (widget.currentUser.savedPosts[index].upvotes
           .contains(widget.currentUser)) {
@@ -25,9 +26,19 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
         widget.currentUser.savedPosts[index].upvotes.add(widget.currentUser);
       }
     });
+    String upvotes = Convertor.listToString(widget
+        .currentUser.savedPosts[index].upvotes
+        .map((e) => e.username)
+        .toList());
+    String downvotes = Convertor.listToString(widget
+        .currentUser.savedPosts[index].downvotes
+        .map((e) => e.username)
+        .toList());
+    await Data().request('updatePostVotes',
+        'id::${widget.currentUser.savedPosts[index].id}||upvotes::$upvotes||downvotes::$downvotes');
   }
 
-  void changeDownVotes(int index) {
+  void changeDownVotes(int index) async {
     setState(() {
       if (widget.currentUser.savedPosts[index].downvotes
           .contains(widget.currentUser)) {
@@ -41,12 +52,24 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
         widget.currentUser.savedPosts[index].downvotes.add(widget.currentUser);
       }
     });
+    String upvotes = Convertor.listToString(widget
+        .currentUser.savedPosts[index].upvotes
+        .map((e) => e.username)
+        .toList());
+    String downvotes = Convertor.listToString(widget
+        .currentUser.savedPosts[index].downvotes
+        .map((e) => e.username)
+        .toList());
+    await Data().request('updatePostVotes',
+        'id::${widget.currentUser.savedPosts[index].id}||upvotes::$upvotes||downvotes::$downvotes');
   }
 
-  void savePost(int index) {
+  void savePost(int index) async {
     setState(() {
       widget.currentUser.addSavedPost(widget.currentUser.savedPosts[index]);
     });
+    await Data().request('insertUserSavedPost',
+        'username::${widget.currentUser.username}||savedPosts::${widget.currentUser.savedPosts[index].id}');
   }
 
   @override
