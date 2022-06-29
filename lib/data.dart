@@ -1,182 +1,171 @@
+import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:reddit_clone_ui/Models/comment_model.dart';
-
 import 'Models/forum_model.dart';
-
+import 'Models/comment_model.dart';
 import 'Models/post_model.dart';
 import 'Models/user_model.dart';
+import 'convertor.dart';
 
 class Data {
-  ForumModel f1;
-  ForumModel f2;
-  ForumModel f3;
-  ForumModel f4;
-
   UserModel currentUser;
 
-  List<PostModel> userPosts;
-  List<PostModel> userSavedPosts;
-
   Data._() {
-    userPosts = [
-      PostModel(
-          "title1",
-          'This is a test for reddit ui.\nIt is second line of text.',
-          null,
-          null,
-          DateTime.now(), [], [], []),
-      PostModel(
-          "title1",
-          'This is a test for reddit ui.\nIt is second line of text.',
-          null,
-          null,
-          DateTime.now(), [], [], []),
-      PostModel(
-          "title1",
-          'This is a test for reddit ui.\nIt is second line of text.',
-          null,
-          null,
-          DateTime.now(), [], [], []),
-      PostModel(
-          "title1",
-          'This is a test for reddit ui.\nIt is second line of text.',
-          null,
-          null,
-          DateTime.now(), [], [], []),
-      PostModel(
-          "title1",
-          'This is a test for reddit ui.\nIt is second line of text.',
-          null,
-          null,
-          DateTime.now(), [], [], []),
-      PostModel(
-          "title1",
-          'This is a test for reddit ui.\nIt is second line of text.',
-          null,
-          null,
-          DateTime.now(), [], [], []),
-    ];
-
-    userSavedPosts = [
-      PostModel(
-          "stitle1",
-          'This is a test for reddit ui.\nIt is second line of text.',
-          null,
-          null,
-          DateTime.now(), [], [], []),
-      PostModel(
-          "stitle1",
-          'This is a test for reddit ui.\nIt is second line of text.',
-          null,
-          null,
-          DateTime.now(), [], [], []),
-      PostModel(
-          "stitle1",
-          'This is a test for reddit ui.\nIt is second line of text.',
-          null,
-          null,
-          DateTime.now(), [], [], []),
-      PostModel(
-          "stitle1",
-          'This is a test for reddit ui.\nIt is second line of text.',
-          null,
-          null,
-          DateTime.now(), [], [], []),
-      PostModel(
-          "stitle1",
-          'This is a test for reddit ui.\nIt is second line of text.',
-          null,
-          null,
-          DateTime.now(), [], [], [])
-    ];
-
-    f1 = ForumModel(
-        'Programming',
-        'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.',
-        null,
-        [userSavedPosts[0], userSavedPosts[1], userSavedPosts[2]]);
-
-    f2 = ForumModel(
-        'vim',
-        'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.',
-        null,
-        [userPosts[0], userPosts[1]]);
-
-    f3 = ForumModel(
-        'Dota2',
-        'Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.',
-        null,
-        [userPosts[2], userPosts[3]]);
-
-    f4 = ForumModel(
-        'Nasa',
-        'Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu.',
-        null,
-        [userPosts[4], userPosts[5]]);
-
-    currentUser = UserModel('Amin Rafiee', '88', '', [f1, f2, f3, f4],
-        userPosts + userSavedPosts, userSavedPosts);
-
-    currentUser.favoriteForums = [f1, f3];
-
-    userPosts.forEach((element) {
-      element.user = currentUser;
-    });
-
-    userPosts[0].forum = f2;
-    userPosts[1].forum = f2;
-    userPosts[2].forum = f3;
-    userPosts[3].forum = f3;
-    userPosts[4].forum = f4;
-    userPosts[5].forum = f4;
-
-    userSavedPosts.forEach((element) {
-      element.user = currentUser;
-    });
-
-    userSavedPosts[0].forum = f1;
-    userSavedPosts[1].forum = f1;
-    userSavedPosts[2].forum = f1;
-
-    userSavedPosts[3].forum = f3;
-    userSavedPosts[4].forum = f3;
-
-    f1.admin = currentUser;
-    f2.admin = currentUser;
-    f3.admin = currentUser;
-    f4.admin = currentUser;
-
-    List<CommentModel> comments = [
-      CommentModel(
-          currentUser,
-          "1This is a test for reddit ui.\nIt is second line of text.",
-          DateTime.now(), [], []),
-      CommentModel(
-          currentUser,
-          "2This is a test for reddit ui.\nIt is second line of text.",
-          DateTime.now(), [], []),
-      CommentModel(
-          currentUser,
-          "3This is a test for reddit ui.\nIt is second line of text.",
-          DateTime.now(), [], []),
-    ];
-
-    userSavedPosts.forEach((element) {
-      element.comments = comments;
-    });
-
-    userSavedPosts.forEach( (element) {
-  
-      element.comments[0].replies = comments;
-    }
-
-    );
+    currentUser = UserModel(
+        posts: [], savedPosts: [], followedForums: [], favoriteForums: []);
   }
 
   static final Data _instance = Data._();
 
   factory Data() {
     return _instance;
+  }
+
+  Future<String> request(String command, String data) async {
+    String result = "";
+    if (data.contains('\n')) {
+      data = data.replaceAll('\n', '[]');
+    }
+
+    await Socket.connect('10.0.2.2', 8080).then((socket) async {
+      socket.write(command + '\n' + data + '\u0000');
+      await socket.flush();
+
+      var listen = socket.listen((response) async {
+        result = String.fromCharCodes(response).trim();
+        print("Received response: $result");
+      });
+      await listen.asFuture<void>();
+
+      if (result.contains('[]')) {
+        result = result.replaceAll('[]', '\n');
+      }
+      // socket.close();
+    });
+    return result;
+  }
+
+  void downloadPosts() async {
+    String username = currentUser.username;
+
+    String posts = await request('getUSerPosts', 'username::$username');
+    if (posts == '-') {
+      return;
+    }
+
+    List<Map<String, String>> postsList = [];
+    posts.split('\n').forEach((post) {
+      postsList.add(Convertor.stringToMap(post));
+    });
+
+    for (var post in postsList) {
+      PostModel postModel = PostModel(
+          id: post['id'],
+          title: post['title'],
+          desc: post['desc'],
+          date: DateTime.parse(post['date']),
+          forum: ForumModel(name: post['name']),
+          upvotes: Convertor.stringToList(post['upvotes'])
+              .map((e) => UserModel(username: e))
+              .toList(),
+          downvotes: Convertor.stringToList(post['downvotes'])
+              .map((e) => UserModel(username: e))
+              .toList(),
+          comments: Convertor.stringToList(post['comments'])
+              .map((e) => CommentModel(id: e))
+              .toList());
+
+      currentUser.posts.add(postModel);
+    }
+  }
+
+  void downloadSavedPosts() async {
+    String username = currentUser.username;
+
+    String savedPosts =
+        await request('getUserSavedPosts', 'username::$username');
+    if (savedPosts == '-') {
+      return;
+    }
+    List<Map<String, String>> savedPostsList = [];
+    savedPosts.split('\n').forEach((post) {
+      savedPostsList.add(Convertor.stringToMap(post));
+    });
+
+    for (var post in savedPostsList) {
+      PostModel postModel = PostModel(
+          id: post['id'],
+          title: post['title'],
+          desc: post['desc'],
+          date: DateTime.parse(post['date']),
+          forum: ForumModel(name: post['name']),
+          upvotes: Convertor.stringToList(post['upvotes'])
+              .map((e) => UserModel(username: e))
+              .toList(),
+          downvotes: Convertor.stringToList(post['downvotes'])
+              .map((e) => UserModel(username: e))
+              .toList(),
+          comments: Convertor.stringToList(post['comments'])
+              .map((e) => CommentModel(id: e))
+              .toList());
+
+      currentUser.savedPosts.add(postModel);
+    }
+  }
+
+  void downloadFollowedForums() async {
+    String username = currentUser.username;
+
+    String followedForums =
+        await request('getUserFollowedForums', 'username::$username');
+
+    if (followedForums == '-') {
+      return;
+    }
+    List<Map<String, String>> followedForumsList = [];
+    followedForums.split('\n').forEach((forum) {
+      followedForumsList.add(Convertor.stringToMap(forum));
+    });
+
+    for (var forum in followedForumsList) {
+      ForumModel forumModel = ForumModel(
+        name: forum['name'],
+        desc: forum['desc'],
+        admin: UserModel(username: forum['admin']),
+        posts: Convertor.stringToList(forum['posts'])
+            .map((e) => PostModel(id: e))
+            .toList(),
+      );
+
+      currentUser.followedForums.add(forumModel);
+    }
+  }
+
+  void downloadFavoriteForums() async {
+    String username = currentUser.username;
+
+    String favoriteForums =
+        await request('getUserFavoriteForums', 'username::$username');
+    if (favoriteForums == '-') {
+      return;
+    }
+
+    List<Map<String, String>> favoriteForumsList = [];
+    favoriteForums.split('\n').forEach((forum) {
+      favoriteForumsList.add(Convertor.stringToMap(forum));
+    });
+
+    for (var forum in favoriteForumsList) {
+      ForumModel forumModel = ForumModel(
+        name: forum['name'],
+        desc: forum['desc'],
+        admin: UserModel(username: forum['admin']),
+        posts: Convertor.stringToList(forum['posts'])
+            .map((e) => PostModel(id: e))
+            .toList(),
+      );
+
+      currentUser.favoriteForums.add(forumModel);
+    }
   }
 }
