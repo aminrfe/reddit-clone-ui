@@ -12,7 +12,7 @@ class Data {
 
   Data._() {
     currentUser = UserModel(
-        posts: [], savedPosts: [], followedForums: [], favoriteForums: []);
+        savedPosts: [], followedForums: [], favoriteForums: []);
   }
 
   static final Data _instance = Data._();
@@ -45,39 +45,6 @@ class Data {
     return result;
   }
 
-  void downloadPosts() async {
-    String username = currentUser.username;
-
-    String posts = await request('getUSerPosts', 'username::$username');
-    if (posts == '-') {
-      return;
-    }
-
-    List<Map<String, String>> postsList = [];
-    posts.split('\n').forEach((post) {
-      postsList.add(Convertor.stringToMap(post));
-    });
-
-    for (var post in postsList) {
-      PostModel postModel = PostModel(
-          id: post['id'],
-          title: post['title'],
-          desc: post['desc'],
-          date: DateTime.parse(post['date']),
-          forum: ForumModel(name: post['name']),
-          upvotes: Convertor.stringToList(post['upvotes'])
-              .map((e) => UserModel(username: e))
-              .toList(),
-          downvotes: Convertor.stringToList(post['downvotes'])
-              .map((e) => UserModel(username: e))
-              .toList(),
-          comments: Convertor.stringToList(post['comments'])
-              .map((e) => CommentModel(id: e))
-              .toList());
-
-      currentUser.posts.add(postModel);
-    }
-  }
 
   void downloadSavedPosts() async {
     String username = currentUser.username;

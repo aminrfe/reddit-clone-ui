@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import '../convertor.dart';
+import '../data.dart';
 import 'forum_model.dart';
 import 'post_model.dart';
 
@@ -9,7 +11,7 @@ class UserModel {
   Image avatar;
   List<ForumModel> followedForums;
   List<ForumModel> favoriteForums;
-  List<PostModel> posts;
+  // List<PostModel> posts;
   List<PostModel> savedPosts;
 
   UserModel(
@@ -17,7 +19,7 @@ class UserModel {
       this.password,
       this.email,
       this.followedForums,
-      this.posts,
+      // this.posts,
       this.savedPosts,
       this.favoriteForums});
 

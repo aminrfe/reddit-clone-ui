@@ -23,12 +23,9 @@ class _AddPostState extends State<AddPost> {
   TextEditingController descController;
 
   void addPost(PostModel post) async {
-    widget.currentUser.posts.add(post);
     currentForum.posts.add(post);
     await Data().request(
         "insertPost", Convertor.mapToString(Convertor.modelToMap(post)));
-    await Data().request("insertUserPost",
-        "username::${widget.currentUser.username}||posts::${post.id}");
     await Data().request(
         "insertForumPost", "forum::${currentForum.name}||posts::${post.id}");
   }
