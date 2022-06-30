@@ -61,8 +61,6 @@ class _ForumPageState extends State<ForumPage> {
     });
 
     await Data().request('deletePost', 'id::${post.id}');
-    await Data().request('deleteUserPost',
-        'username::${widget.currentUser.username}||posts::${post.id}');
     await Data().request('deleteForumPost',
         'forum::${widget.currentForum.name}||posts::${post.id}');
   }
@@ -70,7 +68,7 @@ class _ForumPageState extends State<ForumPage> {
   void toggleJoin() async {
     setState(() {
       if (widget.currentUser.followedForums.contains(widget.currentForum)) {
-        widget.currentUser.followedForums.remove(widget.currentForum);      
+        widget.currentUser.followedForums.remove(widget.currentForum);
         widget.removeForum(widget.currentForum, true);
       } else {
         widget.currentUser.followedForums.add(widget.currentForum);
@@ -278,7 +276,10 @@ class _ForumPageState extends State<ForumPage> {
                                                       style: TextStyle(
                                                           color: Colors.white,
                                                           fontSize: 15)),
-                                                  onPressed: () {
+                                                  onPressed: () async {
+                                                    await Data().request(
+                                                        'updateForumDetail',
+                                                        'name::${_forumNameController.text}||desc::${_forumDescController.text}');
                                                     setState(() {
                                                       widget.currentForum.name =
                                                           _forumNameController
