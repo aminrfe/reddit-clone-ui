@@ -284,15 +284,48 @@ class _ProfilePageState extends State<ProfilePage> {
                             },
                           );
                         } else {
-                          currentUser.email = _emailController.text;
-                          currentUser.username = _usernameController.text;
-                          currentUser.password = _passwordController.text;
-                          await Data().request(
-                              'updateUserAccount',
-                              Convertor.mapToString(
-                                  Convertor.modelToMap(currentUser)));
+                          await Data()
+                              .request('checkUser',
+                                  'username::$_usernameController.text||password::$_passwordController.text')
+                              .then((response) async {
+                            if (response.contains('UserFound')) {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: const Text("User already exists",
+                                        style: TextStyle(
+                                            color: Colors.red,
+                                            fontWeight: FontWeight.bold)),
+                                    content: const Text(
+                                      "Please try with a different username",
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        child: const Text("Ok"),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            } else {
+                              await Data().request('changeUserUsername',
+                                  'oldUsername::${currentUser.username}||newUsername::${_usernameController.text}');
 
-                          Navigator.pop(context);
+                              currentUser.email = _emailController.text;
+                              currentUser.username = _usernameController.text;
+                              currentUser.password = _passwordController.text;
+                              await Data().request(
+                                  'updateUserAccount',
+                                  Convertor.mapToString(
+                                      Convertor.modelToMap(currentUser)));
+
+                              Navigator.pop(context);
+                            }
+                          });
                         }
                       },
                       style: TextButton.styleFrom(

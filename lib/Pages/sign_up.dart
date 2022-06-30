@@ -424,20 +424,50 @@ class _SignUpState extends State<SignUp> {
                     String email = _emailController.text;
 
                     await Data()
-                        .request('insertUser',
-                            'username::$username||password::$password||email::$email')
-                        .then((response) {
-                      if (response.contains('Done')) {
-                        Data().currentUser.username = username;
-                        Data().currentUser.password = password;
-                        Data().currentUser.email = email;
+                        .request('checkUser',
+                            'username::$username||password::$password')
+                        .then((response) async {
+                      if (response.contains('UserFound')) {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text("User already exists",
+                                  style: TextStyle(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold)),
+                              content: const Text(
+                                "Please try with a different username",
+                              ),
+                              actions: [
+                                TextButton(
+                                  child: const Text("Ok"),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      } else {
+                        await Data()
+                            .request('insertUser',
+                                'username::$username||password::$password||email::$email')
+                            .then((response) {
+                          if (response.contains('Done')) {
+                            Data().currentUser.username = username;
+                            Data().currentUser.password = password;
+                            Data().currentUser.email = email;
 
-                        _usernameController.clear();
-                        _passwordController.clear();
-                        _emailController.clear();
+                            _usernameController.clear();
+                            _passwordController.clear();
+                            _emailController.clear();
 
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                            '/HomePage', (Route<dynamic> route) => false);
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                '/HomePage', (Route<dynamic> route) => false);
+                          }
+                        });
                       }
                     });
                   }
