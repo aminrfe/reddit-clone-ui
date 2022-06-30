@@ -17,67 +17,54 @@ class ForumPage extends StatefulWidget {
 }
 
 class _ForumPageState extends State<ForumPage> {
-  void changeUpVotes(int index) async {
+  void changeUpVotes(PostModel post) async {
     setState(() {
-      if (widget.currentForum.posts[index].upvotes
-          .contains(widget.currentUser)) {
-        widget.currentForum.posts[index].upvotes.remove(widget.currentUser);
-      } else if (widget.currentForum.posts[index].downvotes
-          .contains(widget.currentUser)) {
-        widget.currentForum.posts[index].downvotes.remove(widget.currentUser);
-        widget.currentForum.posts[index].upvotes.add(widget.currentUser);
+      if (post.upvotes.contains(widget.currentUser)) {
+        post.upvotes.remove(widget.currentUser);
+      } else if (post.downvotes.contains(widget.currentUser)) {
+        post.downvotes.remove(widget.currentUser);
+        post.upvotes.add(widget.currentUser);
       } else {
-        widget.currentForum.posts[index].upvotes.add(widget.currentUser);
+        post.upvotes.add(widget.currentUser);
       }
     });
-    String upvotes = Convertor.listToString(widget
-        .currentForum.posts[index].upvotes
-        .map((e) => e.username)
-        .toList());
-    String downvotes = Convertor.listToString(widget
-        .currentForum.posts[index].downvotes
-        .map((e) => e.username)
-        .toList());
+    String upvotes =
+        Convertor.listToString(post.upvotes.map((e) => e.username).toList());
+    String downvotes =
+        Convertor.listToString(post.downvotes.map((e) => e.username).toList());
     await Data().request('updatePostVotes',
-        'id::${widget.currentForum.posts[index].id}||upvotes::$upvotes||downvotes::$downvotes');
+        'id::${post.id}||upvotes::$upvotes||downvotes::$downvotes');
   }
 
-  void changeDownVotes(int index) async {
+  void changeDownVotes(PostModel post) async {
     setState(() {
-      if (widget.currentForum.posts[index].downvotes
-          .contains(widget.currentUser)) {
-        widget.currentForum.posts[index].downvotes.remove(widget.currentUser);
-      } else if (widget.currentForum.posts[index].upvotes
-          .contains(widget.currentUser)) {
-        widget.currentForum.posts[index].upvotes.remove(widget.currentUser);
-        widget.currentForum.posts[index].downvotes.add(widget.currentUser);
+      if (post.downvotes.contains(widget.currentUser)) {
+        post.downvotes.remove(widget.currentUser);
+      } else if (post.upvotes.contains(widget.currentUser)) {
+        post.upvotes.remove(widget.currentUser);
+        post.downvotes.add(widget.currentUser);
       } else {
-        widget.currentForum.posts[index].downvotes.add(widget.currentUser);
+        post.downvotes.add(widget.currentUser);
       }
     });
-    String upvotes = Convertor.listToString(widget
-        .currentForum.posts[index].upvotes
-        .map((e) => e.username)
-        .toList());
-    String downvotes = Convertor.listToString(widget
-        .currentForum.posts[index].downvotes
-        .map((e) => e.username)
-        .toList());
+    String upvotes =
+        Convertor.listToString(post.upvotes.map((e) => e.username).toList());
+    String downvotes =
+        Convertor.listToString(post.downvotes.map((e) => e.username).toList());
     await Data().request('updatePostVotes',
-        'id::${widget.currentForum.posts[index].id}||upvotes::$upvotes||downvotes::$downvotes');
+        'id::${post.id}||upvotes::$upvotes||downvotes::$downvotes');
   }
 
-  void removePost(int index) async {
+  void removePost(PostModel post) async {
     setState(() {
-      widget.currentForum.posts.removeAt(index);
+      widget.currentForum.posts.remove(post);
     });
 
-    await Data().request('deletePost',
-        'id::${widget.currentForum.posts[index].id}');
+    await Data().request('deletePost', 'id::${post.id}');
     await Data().request('deleteUserPost',
-        'username::${widget.currentUser.username}||posts::${widget.currentForum.posts[index].id}');
+        'username::${widget.currentUser.username}||posts::${post.id}');
     await Data().request('deleteForumPost',
-        'forum::${widget.currentForum.name}||posts::${widget.currentForum.posts[index].id}');
+        'forum::${widget.currentForum.name}||posts::${post.id}');
   }
 
   void toggleJoin() {
@@ -98,12 +85,14 @@ class _ForumPageState extends State<ForumPage> {
     });
   }
 
-  void savePost(int index) async {
+  void savePost(PostModel post) async {
     setState(() {
-      widget.currentUser.addSavedPost(widget.currentForum.posts[index]);
+      widget.currentUser.addSavedPost(post);
     });
-    await Data().request('insertUserSavedPost',
-        'username::${widget.currentUser.username}||savedPosts::${widget.currentForum.posts[index].id}');
+    String savedPosts = Convertor.listToString(
+        widget.currentUser.savedPosts.map((e) => e.id).toList());
+    await Data().request('updateUserPosts',
+        'username::${widget.currentUser.username}||savedPosts::$savedPosts');
   }
 
   TextEditingController _forumNameController;
@@ -376,10 +365,10 @@ class _ForumPageState extends State<ForumPage> {
                     widget.currentForum.posts[index],
                     widget.currentUser,
                     widget.currentForum,
-                    () => changeUpVotes(index),
-                    () => changeDownVotes(index),
-                    () => removePost(index),
-                    () => savePost(index),
+                    () => changeUpVotes(widget.currentForum.posts[index]),
+                    () => changeDownVotes(widget.currentForum.posts[index]),
+                    () => removePost(widget.currentForum.posts[index]),
+                    () => savePost(widget.currentForum.posts[index]),
                   );
                 },
                 childCount: widget.currentForum.posts.length,

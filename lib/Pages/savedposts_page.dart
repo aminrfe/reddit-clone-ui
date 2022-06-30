@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../Models/post_model.dart';
 import '../convertor.dart';
 import '/Models/user_model.dart';
 import '/Items/post_item_feed.dart';
@@ -12,64 +13,52 @@ class SavedPostsPage extends StatefulWidget {
 }
 
 class _SavedPostsPageState extends State<SavedPostsPage> {
-  void changeUpVotes(int index) async {
+  void changeUpVotes(PostModel post) async {
     setState(() {
-      if (widget.currentUser.savedPosts[index].upvotes
-          .contains(widget.currentUser)) {
-        widget.currentUser.savedPosts[index].upvotes.remove(widget.currentUser);
-      } else if (widget.currentUser.savedPosts[index].downvotes
-          .contains(widget.currentUser)) {
-        widget.currentUser.savedPosts[index].downvotes
-            .remove(widget.currentUser);
-        widget.currentUser.savedPosts[index].upvotes.add(widget.currentUser);
+      if (post.upvotes.contains(widget.currentUser)) {
+        post.upvotes.remove(widget.currentUser);
+      } else if (post.downvotes.contains(widget.currentUser)) {
+        post.downvotes.remove(widget.currentUser);
+        post.upvotes.add(widget.currentUser);
       } else {
-        widget.currentUser.savedPosts[index].upvotes.add(widget.currentUser);
+        post.upvotes.add(widget.currentUser);
       }
     });
-    String upvotes = Convertor.listToString(widget
-        .currentUser.savedPosts[index].upvotes
-        .map((e) => e.username)
-        .toList());
-    String downvotes = Convertor.listToString(widget
-        .currentUser.savedPosts[index].downvotes
-        .map((e) => e.username)
-        .toList());
+    String upvotes =
+        Convertor.listToString(post.upvotes.map((e) => e.username).toList());
+    String downvotes =
+        Convertor.listToString(post.downvotes.map((e) => e.username).toList());
     await Data().request('updatePostVotes',
-        'id::${widget.currentUser.savedPosts[index].id}||upvotes::$upvotes||downvotes::$downvotes');
+        'id::${post.id}||upvotes::$upvotes||downvotes::$downvotes');
   }
 
-  void changeDownVotes(int index) async {
+  void changeDownVotes(PostModel post) async {
     setState(() {
-      if (widget.currentUser.savedPosts[index].downvotes
-          .contains(widget.currentUser)) {
-        widget.currentUser.savedPosts[index].downvotes
-            .remove(widget.currentUser);
-      } else if (widget.currentUser.savedPosts[index].upvotes
-          .contains(widget.currentUser)) {
-        widget.currentUser.savedPosts[index].upvotes.remove(widget.currentUser);
-        widget.currentUser.savedPosts[index].downvotes.add(widget.currentUser);
+      if (post.downvotes.contains(widget.currentUser)) {
+        post.downvotes.remove(widget.currentUser);
+      } else if (post.upvotes.contains(widget.currentUser)) {
+        post.upvotes.remove(widget.currentUser);
+        post.downvotes.add(widget.currentUser);
       } else {
-        widget.currentUser.savedPosts[index].downvotes.add(widget.currentUser);
+        post.downvotes.add(widget.currentUser);
       }
     });
-    String upvotes = Convertor.listToString(widget
-        .currentUser.savedPosts[index].upvotes
-        .map((e) => e.username)
-        .toList());
-    String downvotes = Convertor.listToString(widget
-        .currentUser.savedPosts[index].downvotes
-        .map((e) => e.username)
-        .toList());
+    String upvotes =
+        Convertor.listToString(post.upvotes.map((e) => e.username).toList());
+    String downvotes =
+        Convertor.listToString(post.downvotes.map((e) => e.username).toList());
     await Data().request('updatePostVotes',
-        'id::${widget.currentUser.savedPosts[index].id}||upvotes::$upvotes||downvotes::$downvotes');
+        'id::${post.id}||upvotes::$upvotes||downvotes::$downvotes');
   }
 
-  void savePost(int index) async {
+  void savePost(PostModel post) async {
     setState(() {
-      widget.currentUser.addSavedPost(widget.currentUser.savedPosts[index]);
+      widget.currentUser.addSavedPost(post);
     });
-    await Data().request('insertUserSavedPost',
-        'username::${widget.currentUser.username}||savedPosts::${widget.currentUser.savedPosts[index].id}');
+    String savedPosts = Convertor.listToString(
+        widget.currentUser.savedPosts.map((e) => e.id).toList());
+    await Data().request('updateUserPosts',
+        'username::${widget.currentUser.username}||savedPosts::$savedPosts');
   }
 
   @override
@@ -108,16 +97,17 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
                         fontWeight: FontWeight.bold)),
               )
             : ListView.builder(
-          itemCount: widget.currentUser.savedPosts.length,
-          itemBuilder: (context, index) {
-            return PostItem(
-                widget.currentUser.savedPosts[index],
-                () => changeUpVotes(index),
-                () => changeDownVotes(index),
-                () => savePost(index),
-                (_) => setState(() {}));
-          },
-        ),
+                itemCount: widget.currentUser.savedPosts.length,
+                itemBuilder: (context, index) {
+                  return PostItem(
+                      widget.currentUser.savedPosts[index],
+                      () => changeUpVotes(widget.currentUser.savedPosts[index]),
+                      () =>
+                          changeDownVotes(widget.currentUser.savedPosts[index]),
+                      () => savePost(widget.currentUser.savedPosts[index]),
+                      (_) => setState(() {}));
+                },
+              ),
       ),
     );
   }
