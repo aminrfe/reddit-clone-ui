@@ -27,7 +27,7 @@ class _AddPostState extends State<AddPost> {
     await Data().request(
         "insertPost", Convertor.mapToString(Convertor.modelToMap(post)));
     await Data().request(
-        "insertForumPost", "forum::${currentForum.name}||posts::${post.id}");
+        "insertForumPost", "name::${currentForum.name}||posts::${post.id}");
   }
 
   @override
