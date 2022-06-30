@@ -11,8 +11,8 @@ class Data {
   UserModel currentUser;
 
   Data._() {
-    currentUser = UserModel(
-        savedPosts: [], followedForums: [], favoriteForums: []);
+    currentUser =
+        UserModel(savedPosts: [], followedForums: [], favoriteForums: []);
   }
 
   static final Data _instance = Data._();
@@ -45,94 +45,95 @@ class Data {
     return result;
   }
 
-
   void downloadSavedPosts() async {
     String username = currentUser.username;
 
-    String savedPosts =
-        await request('getUserSavedPosts', 'username::$username');
-    if (savedPosts == '-') {
-      return;
-    }
-    List<Map<String, String>> savedPostsList = [];
-    savedPosts.split('\n').forEach((post) {
-      savedPostsList.add(Convertor.stringToMap(post));
+    await request('getUserSavedPosts', 'username::$username')
+        .then((savedPosts) {
+      if (savedPosts == '-') {
+        return;
+      }
+      List<Map<String, String>> savedPostsList = [];
+      savedPosts.split('\n').forEach((post) {
+        savedPostsList.add(Convertor.stringToMap(post));
+      });
+
+      for (var post in savedPostsList) {
+        PostModel postModel = PostModel(
+            id: post['id'],
+            title: post['title'],
+            desc: post['desc'],
+            date: DateTime.parse(post['date']),
+            forum: ForumModel(name: post['name']),
+            upvotes: Convertor.stringToList(post['upvotes'])
+                .map((e) => UserModel(username: e))
+                .toList(),
+            downvotes: Convertor.stringToList(post['downvotes'])
+                .map((e) => UserModel(username: e))
+                .toList(),
+            comments: Convertor.stringToList(post['comments'])
+                .map((e) => CommentModel(id: e))
+                .toList());
+
+        currentUser.savedPosts.add(postModel);
+      }
     });
-
-    for (var post in savedPostsList) {
-      PostModel postModel = PostModel(
-          id: post['id'],
-          title: post['title'],
-          desc: post['desc'],
-          date: DateTime.parse(post['date']),
-          forum: ForumModel(name: post['name']),
-          upvotes: Convertor.stringToList(post['upvotes'])
-              .map((e) => UserModel(username: e))
-              .toList(),
-          downvotes: Convertor.stringToList(post['downvotes'])
-              .map((e) => UserModel(username: e))
-              .toList(),
-          comments: Convertor.stringToList(post['comments'])
-              .map((e) => CommentModel(id: e))
-              .toList());
-
-      currentUser.savedPosts.add(postModel);
-    }
   }
 
   void downloadFollowedForums() async {
     String username = currentUser.username;
 
-    String followedForums =
-        await request('getUserFollowedForums', 'username::$username');
+    await request('getUserFollowedForums', 'username::$username')
+        .then((followedForums) {
+      if (followedForums == '-') {
+        return;
+      }
+      List<Map<String, String>> followedForumsList = [];
+      followedForums.split('\n').forEach((forum) {
+        followedForumsList.add(Convertor.stringToMap(forum));
+      });
 
-    if (followedForums == '-') {
-      return;
-    }
-    List<Map<String, String>> followedForumsList = [];
-    followedForums.split('\n').forEach((forum) {
-      followedForumsList.add(Convertor.stringToMap(forum));
+      for (var forum in followedForumsList) {
+        ForumModel forumModel = ForumModel(
+          name: forum['name'],
+          desc: forum['desc'],
+          admin: UserModel(username: forum['admin']),
+          posts: Convertor.stringToList(forum['posts'])
+              .map((e) => PostModel(id: e))
+              .toList(),
+        );
+
+        currentUser.followedForums.add(forumModel);
+      }
     });
-
-    for (var forum in followedForumsList) {
-      ForumModel forumModel = ForumModel(
-        name: forum['name'],
-        desc: forum['desc'],
-        admin: UserModel(username: forum['admin']),
-        posts: Convertor.stringToList(forum['posts'])
-            .map((e) => PostModel(id: e))
-            .toList(),
-      );
-
-      currentUser.followedForums.add(forumModel);
-    }
   }
 
   void downloadFavoriteForums() async {
     String username = currentUser.username;
 
-    String favoriteForums =
-        await request('getUserFavoriteForums', 'username::$username');
-    if (favoriteForums == '-') {
-      return;
-    }
+    await request('getUserFavoriteForums', 'username::$username')
+        .then((favoriteForums) {
+      if (favoriteForums == '-') {
+        return;
+      }
 
-    List<Map<String, String>> favoriteForumsList = [];
-    favoriteForums.split('\n').forEach((forum) {
-      favoriteForumsList.add(Convertor.stringToMap(forum));
+      List<Map<String, String>> favoriteForumsList = [];
+      favoriteForums.split('\n').forEach((forum) {
+        favoriteForumsList.add(Convertor.stringToMap(forum));
+      });
+
+      for (var forum in favoriteForumsList) {
+        ForumModel forumModel = ForumModel(
+          name: forum['name'],
+          desc: forum['desc'],
+          admin: UserModel(username: forum['admin']),
+          posts: Convertor.stringToList(forum['posts'])
+              .map((e) => PostModel(id: e))
+              .toList(),
+        );
+
+        currentUser.favoriteForums.add(forumModel);
+      }
     });
-
-    for (var forum in favoriteForumsList) {
-      ForumModel forumModel = ForumModel(
-        name: forum['name'],
-        desc: forum['desc'],
-        admin: UserModel(username: forum['admin']),
-        posts: Convertor.stringToList(forum['posts'])
-            .map((e) => PostModel(id: e))
-            .toList(),
-      );
-
-      currentUser.favoriteForums.add(forumModel);
-    }
   }
 }

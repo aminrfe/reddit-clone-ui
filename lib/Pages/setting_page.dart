@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../Models/user_model.dart';
+import '../data.dart';
 import '/Pages/about_us.dart';
 import '/Pages/create_forum.dart';
 import '/Pages/profile_page.dart';
@@ -96,6 +98,13 @@ class SettingPage extends StatelessWidget {
                 ),
                 leading: Icon(Icons.logout_outlined),
                 onTap: () {
+                  Data().currentUser = UserModel(
+                      username: '',
+                      password: '',
+                      email: '',
+                      savedPosts: [],
+                      followedForums: [],
+                      favoriteForums: []);
                   onLogout();
                 },
               ),

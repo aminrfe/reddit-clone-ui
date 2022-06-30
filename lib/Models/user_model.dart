@@ -9,17 +9,15 @@ class UserModel {
   String password;
   String email;
   Image avatar;
+  List<PostModel> savedPosts;
   List<ForumModel> followedForums;
   List<ForumModel> favoriteForums;
-  // List<PostModel> posts;
-  List<PostModel> savedPosts;
 
   UserModel(
       {this.username,
       this.password,
       this.email,
       this.followedForums,
-      // this.posts,
       this.savedPosts,
       this.favoriteForums});
 
