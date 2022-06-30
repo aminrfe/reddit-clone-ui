@@ -67,22 +67,23 @@ class _ForumPageState extends State<ForumPage> {
         'forum::${widget.currentForum.name}||posts::${post.id}');
   }
 
-  void toggleJoin() {
-    setState(() async {
+  void toggleJoin() async {
+    setState(() {
       if (widget.currentUser.followedForums.contains(widget.currentForum)) {
-        widget.currentUser.followedForums.remove(widget.currentForum);
+        widget.currentUser.followedForums.remove(widget.currentForum);      
         widget.removeForum(widget.currentForum, true);
-
-        await Data().request('deleteUserForum',
-            'username::${widget.currentUser.username}||forums::${widget.currentForum.name}');
       } else {
         widget.currentUser.followedForums.add(widget.currentForum);
         widget.removeForum(widget.currentForum, false);
-
-        await Data().request('insertUserForum',
-            'username::${widget.currentUser.username}||forums::${widget.currentForum.name}');
       }
     });
+
+    String followedForums = Convertor.listToString(
+        widget.currentUser.followedForums.map((e) => e.name).toList());
+    String favoriteForums = Convertor.listToString(
+        widget.currentUser.favoriteForums.map((e) => e.name).toList());
+    await Data().request('updateUserForums',
+        'username::${widget.currentUser.username}||followedForums::$followedForums||favoriteForums::$favoriteForums');
   }
 
   void savePost(PostModel post) async {
