@@ -81,8 +81,11 @@ class _FeedPageState extends State<FeedPage> {
     setState(() {
       widget.currentUser.addSavedPost(post);
     });
-    await Data().request('insertUserSavedPost',
-        'username::${widget.currentUser.username}||savedPosts::${post.id}');
+
+    String savedPosts = Convertor.listToString(
+        widget.currentUser.savedPosts.map((e) => e.id).toList());
+    await Data().request('updateUserPosts',
+        'username::${widget.currentUser.username}||savedPosts::$savedPosts');
   }
 
   @override
@@ -140,16 +143,16 @@ class _FeedPageState extends State<FeedPage> {
                         fontWeight: FontWeight.bold)),
               )
             : ListView.builder(
-          itemCount: posts.length,
-          itemBuilder: (context, index) {
-            return PostItem(
-                posts[index],
-                () => changeUpVotes(posts[index]),
-                () => changeDownVotes(posts[index]),
-                () => savePost(posts[index]),
-                (_) => setState(() {}));
-          },
-        ),
+                itemCount: posts.length,
+                itemBuilder: (context, index) {
+                  return PostItem(
+                      posts[index],
+                      () => changeUpVotes(posts[index]),
+                      () => changeDownVotes(posts[index]),
+                      () => savePost(posts[index]),
+                      (_) => setState(() {}));
+                },
+              ),
       ),
     );
   }

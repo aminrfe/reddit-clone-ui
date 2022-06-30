@@ -373,7 +373,6 @@ class _LogInState extends State<LogIn> {
                               Convertor.stringToMap(response)['email'];
                         });
 
-                        Data().downloadPosts();
                         Data().downloadSavedPosts();
                         Data().downloadFollowedForums();
                         Data().downloadFavoriteForums();

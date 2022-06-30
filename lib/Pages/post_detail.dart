@@ -78,8 +78,10 @@ class _PostDetailState extends State<PostDetail> {
     setState(() {
       widget.currentUser.addSavedPost(post);
     });
-    await Data().request('insertUserSavedPost',
-        'username::${widget.currentUser.username}||savedPosts::${post.id}');
+    String savedPosts = Convertor.listToString(
+        widget.currentUser.savedPosts.map((e) => e.id).toList());
+    await Data().request('updateUserPosts',
+        'username::${widget.currentUser.username}||savedPosts::$savedPosts');
   }
 
   void changeUpVotesComment(CommentModel comment) async {
@@ -178,27 +180,30 @@ class _PostDetailState extends State<PostDetail> {
                           : Icon(Icons.send, color: Colors.grey, size: 25),
                       onPressed: value.text.isNotEmpty
                           ? () async {
-                              String commentId = await Data().request(
-                                  'genCommentId',
-                                  'comment:${commentController.text}');
-                              CommentModel comment = CommentModel(
-                                  id: commentId,
-                                  user: widget.currentUser,
-                                  comment: commentController.text,
-                                  date: DateTime.now(),
-                                  upvotes: [],
-                                  downvotes: []);
-                              setState(() {
-                                comments.add(comment);
+                              await Data()
+                                  .request('genCommentId',
+                                      'comment::${commentController.text}')
+                                  .then((response) async {
+                                CommentModel comment = CommentModel(
+                                    id: response,
+                                    user: widget.currentUser,
+                                    comment: commentController.text,
+                                    date: DateTime.now(),
+                                    upvotes: [],
+                                    downvotes: []);
+                                setState(() {
+                                  comments.add(comment);
+                                });
+                                await Data().request('insertPostComment',
+                                    'id::${widget.currentPost.id}||comments::${comment.id}');
+                                await Data().request(
+                                    'insertComment',
+                                    Convertor.mapToString(
+                                        Convertor.modelToMap(comment)));
+
+                                commentController.clear();
+                                Navigator.pop(context);
                               });
-                              await Data().request('insertPostComment',
-                                  'id::${widget.currentPost.id}||comments::${comment.id}');
-                              await Data().request(
-                                  'insertComment',
-                                  Convertor.mapToString(
-                                      Convertor.modelToMap(comment)));
-                              commentController.clear();
-                              Navigator.pop(context);
                             }
                           : null);
                 },
