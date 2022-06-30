@@ -131,7 +131,15 @@ class _FeedPageState extends State<FeedPage> {
           await Future.delayed(const Duration(seconds: 1));
           refresh();
         },
-        child: ListView.builder(
+        child: posts.isEmpty
+            ? const Center(
+                child: Text('No Post',
+                    style: TextStyle(
+                        fontSize: 25,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.bold)),
+              )
+            : ListView.builder(
           itemCount: posts.length,
           itemBuilder: (context, index) {
             return PostItem(

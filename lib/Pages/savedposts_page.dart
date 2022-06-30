@@ -99,7 +99,15 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
           await Future.delayed(const Duration(seconds: 1));
           setState(() {});
         },
-        child: ListView.builder(
+        child: widget.currentUser.savedPosts.isEmpty
+            ? const Center(
+                child: Text('No SavedPost',
+                    style: TextStyle(
+                        fontSize: 25,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.bold)),
+              )
+            : ListView.builder(
           itemCount: widget.currentUser.savedPosts.length,
           itemBuilder: (context, index) {
             return PostItem(
