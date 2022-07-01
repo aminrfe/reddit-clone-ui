@@ -71,7 +71,8 @@ class Data {
                   .map((e) => UserModel(username: e))
                   .toList(),
               comments: []);
-          Convertor.stringToList(post['comments']).forEach((e) async {
+          await Future.forEach(Convertor.stringToList(post['comments']),
+              (e) async {
             await getCommentById(e).then((comment) {
               postModel.comments.add(comment);
             });
@@ -104,7 +105,8 @@ class Data {
               admin: UserModel(username: forum['admin']),
               posts: []);
 
-          Convertor.stringToList(forum['posts']).forEach((e) async {
+          await Future.forEach(Convertor.stringToList(forum['posts']),
+              (e) async {
             await getPostById(e).then((post) {
               forumModel.posts.add(post);
             });
@@ -134,7 +136,8 @@ class Data {
               admin: UserModel(username: forum['admin']),
               posts: []);
 
-          Convertor.stringToList(forum['posts']).forEach((e) async {
+          await Future.forEach(Convertor.stringToList(forum['posts']),
+              (e) async {
             await getPostById(e).then((post) {
               print(Convertor.modelToString(post));
               forumModel.posts.add(post);
@@ -167,7 +170,7 @@ class Data {
               .toList(),
           comments: []);
 
-      Convertor.stringToList(post['comments']).forEach((e) async {
+      await Future.forEach(Convertor.stringToList(post['comments']), (e) async {
         await getCommentById(e).then((comment) {
           print(Convertor.modelToString(comment));
           postModel.comments.add(comment);

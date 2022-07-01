@@ -72,7 +72,7 @@ class _ForumPageState extends State<ForumPage> {
     await Data().request(
         'updateForumPosts', 'name::${widget.currentForum.name}||posts::$posts');
     await Data().request('updateUserPosts',
-        'username::${widget.currentUser.username}||posts::$savedPosts');
+        'username::${widget.currentUser.username}||savedPosts::$savedPosts');
   }
 
   void toggleJoin() async {
