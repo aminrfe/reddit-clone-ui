@@ -58,11 +58,21 @@ class _ForumPageState extends State<ForumPage> {
   void removePost(PostModel post) async {
     setState(() {
       widget.currentForum.posts.remove(post);
+      if (widget.currentUser.savedPosts.contains(post)) {
+        widget.currentUser.savedPosts.remove(post);
+      }
     });
 
+    String posts = Convertor.listToString(
+        widget.currentForum.posts.map((e) => e.id).toList());
+    String savedPosts = Convertor.listToString(
+        widget.currentUser.savedPosts.map((e) => e.id).toList());
+
     await Data().request('deletePost', 'id::${post.id}');
-    await Data().request('deleteForumPost',
-        'forum::${widget.currentForum.name}||posts::${post.id}');
+    await Data().request(
+        'updateForumPosts', 'name::${widget.currentForum.name}||posts::$posts');
+    await Data().request('updateUserPosts',
+        'username::${widget.currentUser.username}||posts::$savedPosts');
   }
 
   void toggleJoin() async {
