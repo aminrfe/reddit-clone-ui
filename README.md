@@ -53,3 +53,17 @@ The user can create a forum by enter name and description of forum.
 
 ![add forum](https://user-images.githubusercontent.com/93943199/176657740-a396958a-4e41-46b4-b93d-8f11dc4b9ab9.png)
 
+- **Saved Posts Page**
+
+The user can see posts that he/she has saved.
+
+![saved posts](https://user-images.githubusercontent.com/93943199/176783017-3a963b3d-28e6-407e-9764-f69eedbe2ed9.PNG)
+
+- **About Us Page**
+
+![about us](https://user-images.githubusercontent.com/93943199/176658167-c00b6148-20b7-4389-af4d-31363ce40f6a.png)
+
+### Server repositoriy
+
+You can visit the repository of the java server here:
+[**Server**](https://github.com/Erfun-ABD/reddit-clone-server)
