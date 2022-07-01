@@ -21,6 +21,7 @@ class _FeedPageState extends State<FeedPage> {
 
   @override
   void initState() {
+   
     posts = widget.currentUser.followedForums
         .map((e) => e.posts)
         .expand((e) => e)

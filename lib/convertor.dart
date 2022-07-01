@@ -7,7 +7,7 @@ import 'Models/post_model.dart';
 class Convertor {
   static Map<String, String> stringToMap(String data) {
     Map<String, String> map = <String, String>{};
-    List<String> pairs = data.trim().split("\\|\\|");
+    List<String> pairs = data.trim().split("||");
 
     for (String pair in pairs) {
       if (pair.length > 2 && pair.contains("::")) {
@@ -48,6 +48,9 @@ class Convertor {
   }
 
   static List<String> stringToList(String data) {
+    if (data == '-') {
+      return [];
+    }
     return data.trim().split(",");
   }
 
@@ -76,6 +79,7 @@ class Convertor {
       map['desc'] = model.desc;
       map['date'] = model.date.toString();
       map['forum'] = model.forum.name;
+      map['user'] = model.user.username;
     } else if (model is CommentModel) {
       map['id'] = model.id;
       map['user'] = model.user.username;
@@ -87,5 +91,9 @@ class Convertor {
       map['admin'] = model.admin.username;
     }
     return map;
+  }
+
+  static String modelToString(dynamic model) {
+    return mapToString(modelToMap(model));
   }
 }

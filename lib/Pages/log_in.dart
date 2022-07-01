@@ -373,9 +373,9 @@ class _LogInState extends State<LogIn> {
                               Convertor.stringToMap(response)['email'];
                         });
 
-                        Data().downloadSavedPosts();
-                        Data().downloadFollowedForums();
-                        Data().downloadFavoriteForums();
+                        await Data().downloadSavedPosts();
+                        await Data().downloadFollowedForums();
+                        await Data().downloadFavoriteForums();
 
                         _usernameController.clear();
                         _passwordController.clear();

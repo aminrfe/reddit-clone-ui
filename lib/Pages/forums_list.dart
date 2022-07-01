@@ -76,12 +76,11 @@ class _ForumsListState extends State<ForumsList> {
 
       widget.currentUser.favoriteForums
           .sort((a, b) => a.name.compareTo(b.name));
-
-      String favoriteForums = Convertor.listToString(
-          widget.currentUser.favoriteForums.map((e) => e.name).toList());
-      await Data().request('updateUserForums',
-          'username::${widget.currentUser.username}||favoriteForums::$favoriteForums');
     }
+    String favoriteForums = Convertor.listToString(
+        widget.currentUser.favoriteForums.map((e) => e.name).toList());
+    await Data().request('updateUserForums',
+        'username::${widget.currentUser.username}||favoriteForums::$favoriteForums');
   }
 
   void refresh() {
