@@ -63,7 +63,7 @@ The user can see posts that he/she has saved.
 
 ![about us](https://user-images.githubusercontent.com/93943199/176658167-c00b6148-20b7-4389-af4d-31363ce40f6a.png)
 
-### Server repositoriy
+### Server repository
 
 You can visit the repository of the java server here:
 [**Server**](https://github.com/Erfun-ABD/reddit-clone-server)
